@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>世界史一問一答 — FSRS問題集</title>
+<style>
+:root{
+  --paper:#F7F5F0;
+  --paper-2:#EFECE4;
+  --ink:#20355E;
+  --ink-soft:#5A6B8C;
+  --ink-faint:#C4CCDC;
+  --line:#DAD5C8;
+  --seal:#B7362A;
+  --seal-soft:#F3DEDA;
+  --good:#2E6B4F;
+  --card:#FFFFFF;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(32,53,94,.06), 0 8px 24px rgba(32,53,94,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;height:-webkit-fill-available}
+body{min-height:100%}
+button,input,select,textarea{touch-action:manipulation}
+body{
+  font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.55;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  overscroll-behavior:none;
+}
+#app{max-width:520px;margin:0 auto;min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;display:flex;flex-direction:column}
+
+/* ===== header ===== */
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px}
+.brand{display:flex;align-items:center;gap:10px}
+.stamp{
+  width:34px;height:34px;border:2px solid var(--seal);color:var(--seal);
+  display:flex;align-items:center;justify-content:center;border-radius:6px;
+  font-size:15px;font-weight:700;letter-spacing:0;line-height:1;
+  transform:rotate(-4deg);
+}
+.brand h1{font-size:16px;font-weight:700;letter-spacing:.04em}
+.brand small{display:block;font-size:10px;color:var(--ink-soft);font-weight:400;letter-spacing:.12em}
+nav{display:flex;gap:4px}
+nav button{
+  background:none;border:none;font:inherit;font-size:12px;color:var(--ink-soft);
+  padding:7px 10px;border-radius:9px;cursor:pointer;
+}
+nav button.on{background:var(--ink);color:var(--paper)}
+
+main{flex:1;display:flex;flex-direction:column;padding:6px 18px 24px}
+
+/* ===== home ===== */
+.hero{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 20px;margin-bottom:14px;
+}
+.hero .date{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);margin-bottom:14px}
+.counts{display:flex;gap:0}
+.count{flex:1;text-align:center;position:relative}
+.count+.count::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--line)}
+.count b{display:block;font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15}
+.count.due b{color:var(--seal)}
+.count.new b{color:var(--ink)}
+.count.done b{color:var(--good)}
+.count span{font-size:11px;color:var(--ink-soft);letter-spacing:.08em}
+.start{
+  width:100%;margin-top:20px;border:none;border-radius:12px;
+  background:var(--ink);color:var(--paper);font:inherit;font-size:16px;font-weight:700;
+  padding:15px;cursor:pointer;letter-spacing:.06em;
+}
+.start:active{transform:scale(.985)}
+.start:disabled{background:var(--ink-faint);color:#fff}
+.substat{
+  display:flex;justify-content:space-between;background:var(--paper-2);
+  border-radius:10px;padding:10px 14px;font-size:12px;color:var(--ink-soft);margin-bottom:14px;
+}
+.substat b{color:var(--ink);font-variant-numeric:tabular-nums}
+.notice{font-size:11px;color:var(--seal);background:var(--seal-soft);border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none}
+
+/* ===== review card ===== */
+.progress{height:3px;background:var(--paper-2);border-radius:2px;margin:4px 0 14px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .25s}
+.qtags{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-bottom:8px}
+.qtags .tag-new{color:var(--seal);font-weight:700}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);flex:1;display:flex;flex-direction:column;
+  overflow:hidden;min-height:0;
+}
+.face{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:26px 20px;position:relative;min-height:0;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;cursor:pointer;
+}
+.face.revealed{justify-content:flex-start;align-items:stretch;padding:22px 20px 14px;cursor:default}
+.chapter-tag{
+  font-size:11px;color:var(--seal);letter-spacing:.06em;margin-bottom:14px;text-align:center;
+  font-weight:700;
+}
+.q-front{font-size:22px;font-weight:600;text-align:center;line-height:1.6;position:relative;z-index:1;word-break:break-word}
+.q-front.long{font-size:19px}
+.q-front.xlong{font-size:16px;font-weight:500}
+.hint{margin-top:22px;font-size:12px;color:var(--ink-soft);letter-spacing:.1em}
+.answer{width:100%;display:none;flex-direction:column;gap:0;text-align:center}
+.answer.show{display:flex}
+.answer .udel{margin-top:16px}
+.reveal{
+  border:none;border-top:1px solid var(--line);background:var(--card);
+  font:inherit;font-size:15px;font-weight:700;color:var(--ink);padding:16px;cursor:pointer;
+  letter-spacing:.1em;
+}
+.grades{display:none;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.grades.show{display:grid}
+.grades button{
+  border:none;background:var(--card);font:inherit;padding:11px 4px 13px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+}
+.grades button+button{border-left:1px solid var(--line)}
+.grades b{font-size:14px;font-weight:700}
+.grades small{font-size:10px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.g1 b{color:var(--seal)} .g2 b{color:#A2691E} .g3 b{color:var(--ink)} .g4 b{color:var(--good)}
+.grades button:active{background:var(--paper-2)}
+
+/* finish */
+.finish{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.finish .bigstamp{
+  width:88px;height:88px;border:3px solid var(--seal);color:var(--seal);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;
+  transform:rotate(-6deg);
+}
+.finish p{color:var(--ink-soft);font-size:13px}
+
+/* ===== browse ===== */
+.search{
+  width:100%;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--line);
+  border-radius:11px;background:var(--card);color:var(--ink);margin-bottom:10px;outline:none;
+}
+.search:focus{border-color:var(--ink-soft)}
+.chfilter{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:2px;-webkit-overflow-scrolling:touch}
+.chfilter::-webkit-scrollbar{display:none}
+.chfilter button{
+  flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+  font:inherit;font-size:11px;padding:6px 11px;border-radius:20px;cursor:pointer;white-space:nowrap;
+}
+.chfilter button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.blist{display:flex;flex-direction:column;gap:8px}
+.bitem{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer}
+.bitem:active{background:var(--paper-2)}
+.bitem .r1{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bitem .qq{font-size:14px;font-weight:600;line-height:1.5}
+.bitem .st{font-size:10px;color:var(--ink-soft);white-space:nowrap;flex:none}
+.bitem .aa{font-size:12px;color:var(--seal);margin-top:4px}
+.bmore{margin:12px auto;display:block;background:none;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px;color:var(--ink-soft);padding:9px 22px;cursor:pointer}
+
+/* ===== card detail modal ===== */
+.modalOverlay{
+  position:fixed;inset:0;background:rgba(32,53,94,.36);z-index:60;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modalOverlay.show{opacity:1;pointer-events:auto}
+.modalSheet{
+  width:100%;max-width:520px;max-height:82vh;background:var(--paper);
+  border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(32,53,94,.18);
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(16px);transition:transform .2s;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.modalOverlay.show .modalSheet{transform:translateY(0)}
+.modalHead{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.modalHead .tag{font-size:11px;color:var(--ink-soft);letter-spacing:.08em}
+.modalClose{border:none;background:var(--paper-2);color:var(--ink-soft);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modalBody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 20px 8px;text-align:center}
+.detail{text-align:center}
+.detail .chap-d{font-size:11px;color:var(--seal);font-weight:700;letter-spacing:.06em;margin-bottom:10px}
+.detail .q-d{font-size:19px;font-weight:600;line-height:1.6;word-break:break-word;text-align:left}
+.detail .q-d.long{font-size:17px}
+.detail .q-d.xlong{font-size:15px}
+.detail hr{border:none;border-top:1px solid var(--line);margin:16px auto;width:56px}
+.detail .a-d{font-size:19px;font-weight:700;line-height:1.6;text-align:left;color:var(--seal)}
+.detail .n-block{margin-top:16px;text-align:left;display:flex;flex-direction:column;gap:10px}
+.n-item{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.n-item .n-zh{font-size:15px;font-weight:600;line-height:1.6}
+.n-item .n-jp{font-size:13px;color:var(--ink-soft);margin-top:4px;line-height:1.6}
+.n-note{background:var(--seal-soft);color:var(--seal);border-radius:11px;padding:10px 13px;font-size:12.5px;line-height:1.7;text-align:left}
+.n-plain{background:var(--paper-2);border-radius:11px;padding:10px 13px;font-size:13px;color:var(--ink-soft);line-height:1.7;text-align:left;white-space:pre-wrap}
+.detail .modalStats{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.mstat{background:var(--paper-2);border-radius:9px;padding:6px 11px;font-size:11px;color:var(--ink-soft)}
+.mstat b{color:var(--ink);font-variant-numeric:tabular-nums}
+.modalFoot{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.modalFoot button{flex:1;border-radius:11px;font:inherit;font-size:14px;padding:12px;cursor:pointer}
+.modalFoot .mEdit{border:none;background:var(--ink);color:var(--paper);font-weight:700}
+.modalFoot .mStudy{border:1px solid var(--ink);background:none;color:var(--ink);font-weight:700}
+
+/* ===== settings ===== */
+.spanel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;gap:12px}
+.srow+.srow{border-top:1px solid var(--line)}
+.srow label{font-size:14px;font-weight:600}
+.srow small{display:block;font-size:11px;color:var(--ink-soft);font-weight:400;margin-top:2px}
+.srow select,.srow input[type=number]{
+  font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;
+  background:var(--paper);color:var(--ink);width:92px;text-align:center;
+}
+.danger{width:100%;border:1px solid var(--seal);background:none;color:var(--seal);font:inherit;font-size:14px;font-weight:600;border-radius:11px;padding:12px;cursor:pointer}
+.sinfo{font-size:11px;color:var(--ink-soft);line-height:1.7;padding:0 4px}
+/* ===== add form ===== */
+.fpanel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.frow label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:4px;letter-spacing:.04em}
+.frow input,.frow textarea{
+  width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:10px;background:var(--paper);color:var(--ink);outline:none;
+}
+.frow textarea{resize:vertical;min-height:60px;font-size:14px}
+.frow input:focus,.frow textarea:focus{border-color:var(--ink-soft)}
+.fbtns{display:flex;gap:10px}
+.ai-fill{
+  flex:1;border:1px solid var(--ink);background:none;color:var(--ink);font:inherit;
+  font-size:14px;font-weight:600;border-radius:11px;padding:12px;cursor:pointer;
+}
+.ai-fill:disabled{opacity:.5}
+.fsave{flex:1;border:none;background:var(--ink);color:var(--paper);font:inherit;font-size:14px;font-weight:700;border-radius:11px;padding:12px;cursor:pointer}
+.udel{border:none;background:none;color:var(--ink-soft);font:inherit;font-size:11px;cursor:pointer;padding:4px 0 0;text-decoration:underline}
+input[type=file]{
+  width:100%;font:inherit;font-size:12px;padding:9px;border:1px dashed var(--line);
+  border-radius:10px;background:var(--paper);color:var(--ink-soft);
+}
+input[type=file]::-webkit-file-upload-button{
+  font:inherit;font-size:12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink);padding:6px 12px;margin-right:10px;cursor:pointer;
+}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--ink)}
+.dbtn{
+  flex:1;min-width:88px;border:1px solid var(--line);background:var(--card);
+  font:inherit;font-size:12px;color:var(--ink-soft);border-radius:9px;padding:8px 6px;cursor:pointer;
+}
+.dbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.dbtn:active{transform:scale(.97)}
+.ulabel{color:var(--seal);font-weight:700}
+.toast{
+  position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+  background:var(--ink);color:var(--paper);font-size:13px;padding:10px 18px;border-radius:24px;
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:50;white-space:nowrap;
+}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="brand">
+    <div class="stamp">史</div>
+    <h1>世界史一問一答<small>FSRS 問題集・全<span id="totalN">0</span>問</small></h1>
+  </div>
+  <nav>
+    <button id="nav-home" class="on">学習</button>
+    <button id="nav-browse">一覧</button>
+    <button id="nav-add">追加</button>
+    <button id="nav-set">設定</button>
+  </nav>
+</header>
+<main id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+<div id="errbar" style="display:none;position:fixed;top:0;left:0;right:0;background:#B7362A;color:#fff;font-size:11px;padding:8px 12px;z-index:99;word-break:break-all"></div>
+<noscript><div style="padding:30px 20px;text-align:center;font-size:14px;color:#B7362A">このアプリの動作にはJavaScriptが必要です。iPhoneの「ファイル」のプレビューではなく、共有ボタンから「Safariで開く」を選ぶか、Claudeアプリ内のプレビューでご利用ください。</div></noscript>
+
+<script>
+const CARDS=[{"id":1,"q":"1648年に締結され、各諸侯に主権を認め「主権国家体制（ウェストファリア体制）」の確立の契機となった条約は何か。","a":"ウェストファリア条約","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":2,"q":"ウェストファリア条約によって独立が正式に承認された、北海交易で繁栄した新興国家はどこか（2つ）。","a":"オランダ（ネーデルラント連邦共和国）、スイス","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":3,"q":"1713年のユトレヒト条約で、イギリスがスペインから獲得し、地中海進出の拠点とした戦略的要衝はどこか。","a":"ジブラルタル（およびミノルカ島）","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":4,"q":"1713年のユトレヒト条約で、イギリスがスペインから獲得した、黒人奴隷を供給する独占的権利を何と呼ぶか。","a":"アシエント（奴隷供給契約）","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":5,"q":"1756年にオーストリアのハプスブルク家が、プロイセンに対抗するために長年の宿敵であったフランス・ブルボン家と結んだ同盟（外交的転換）を何と呼ぶか。","a":"外交革命","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":6,"q":"シュレジエンの奪還を目指したシュレジエン戦争・七年戦争におけるプロイセンの国王は誰か。","a":"フリードリヒ2世（フリードリヒ大王）","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":7,"q":"イギリスとフランスの植民地争奪戦において、北米での七年戦争と並行して戦われた戦いは何か。","a":"フレンチ・インディアン戦争","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":8,"q":"1763年のパリ条約で、イギリスがフランスから獲得した北米の地域はどこか（主要な2つ）。","a":"カナダ、ミシシッピ川以東のルイジアナ","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":9,"q":"1772年、1793年、1795年の3回にわたり、ロシア・プロイセン・オーストリアによって実施された領土分割を何と呼ぶか。","a":"ポーランド分割","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":10,"q":"ポーランド分割に抵抗して義勇軍を率いて抵抗運動を展開した、アメリカ独立戦争にも参加したポーランドの愛国者は誰か。","a":"コシチュシコ","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":11,"q":"ウィーン会議（1814〜1815年）を主導し、欧州の勢力均衡と正統主義を重んじたオーストリアの外相（後に宰相）は誰か。","a":"メッテルニヒ","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":12,"q":"メッテルニヒらの反動体制に対し、ドイツの学生組合が結成し、自由と統一を求めて起こした運動は何か。","a":"ブルシェンシャフト運動","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":13,"q":"1830年の7月革命の影響を受けて起こり、1831年にオランダから独立を果たした立憲君主国はどこか。","a":"ベルギー","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":14,"q":"1848年の「諸国民の春」の中で、ドイツ統一と憲法制定を議論するために開かれた全ドイツの代表者会議は何か。","a":"フランクフルト国民議会","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":15,"q":"ドイツ統一の手法をめぐり、オーストリアを除外してプロイセンを中心に統一を図ろうとする立場を何と呼ぶか。","a":"小ドイツ主義","c":"【第1章】欧州主権国家体制の形成と変容（15題）"},{"id":16,"q":"16世紀半ばにボリビアで発見され、大量の銀が掘り出されてヨーロッパやアジアへ流出した有名な銀山は何か。","a":"ポトシ銀山","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":17,"q":"アメリカ大陸から大量の銀がヨーロッパに流入したことで激しいインフレーションが起こり、固定地代に頼る領主層が打撃を受けた現象を何と呼ぶか。","a":"価格革命","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":18,"q":"16世紀後半から、スペインがフィリピンのマニラとメキシコのアカプルコの間で太平洋を横断して行った交易を何と呼ぶか。","a":"ガレオン貿易（アカプルコ貿易）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":19,"q":"明代後半に導入され、地銀と丁銀を一括して銀で納入させる税制改革を何と呼ぶか。","a":"一条鞭法","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":20,"q":"清代に導入され、人頭税（丁税）を固定化して地銀（土地税）の中に組み込んで一括銀納させた税制を何と呼ぶか。","a":"地丁銀制","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":21,"q":"ヨーロッパの製造品、アフリカの黒人奴隷、アメリカの砂糖・タバコ・綿花を循環させた大西洋の貿易構造を何と呼ぶか。","a":"環大西洋貿易（三角貿易）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":22,"q":"大西洋三角貿易において、アフリカからアメリカ大陸へ黒人奴隷を輸送する絶望的な航路を何と呼ぶか。","a":"中道航路（ミドル・パッセージ）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":23,"q":"17世紀にオランダが東洋貿易の拠点としてジャワ島に建設した要塞都市（現在のジャカルタ）はどこか。","a":"バタヴィア","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":24,"q":"1651年、イギリスがオランダの中継貿易を排除・打撃を与える目的で発布した法律は何か。","a":"航海法（航海条例）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":25,"q":"重商主義政策のもと、国家が設立して東インド方面での貿易独占権を与えられた国策会社を何と呼ぶか。","a":"東インド会社","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":26,"q":"1757年、イギリス東インド会社がフランス・ベンガル太守の連合軍を破り、インドでの覇権を確立した戦いは何か。","a":"プラッシーの戦い","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":27,"q":"プラッシーの戦い以降、イギリス東インド会社がベンガル地方などで獲得した「征服地からの租税徴収権」を何と呼ぶか。","a":"ディーワーニー（租税徴収権）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":28,"q":"アダム・スミスが1776年に著し、重商主義・統制経済を批判して自由放任主義（レッセ・フェール）を提唱した著作は何か。","a":"『国富論』（『諸国民の富』）","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":29,"q":"18世紀半ばに綿工業を中心にイギリスで始まり、世界初の工業化を推進した技術革新と社会変革を何と呼ぶか。","a":"産業革命","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":30,"q":"産業革命期のイギリスにおいて、綿織物機械の発明によって職を失った手織り職人らが起こした機械破壊運動を何と呼ぶか。","a":"ラッダイト運動","c":"【第2章】大西洋環流・銀とグローバル経済・交易網（15題）"},{"id":31,"q":"1765年にイギリス本国がアメリカ植民地に課した、印刷物全般に印紙の貼付を義務付けた法は何か。","a":"印紙法","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":32,"q":"アメリカ植民地側が本国の不当な課税に対して唱えた、代表権と課税の結びつきを示すスローガンは何か。","a":"「代表なくして課税なし」","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":33,"q":"1776年にトマス・ペインが著し、君主制の不合理を説いてアメリカ独立の必要性を広めたパンフレットは何か。","a":"『コモン・センス』（『常識』）","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":34,"q":"1776年7月4日、トマス・ジェファーソンらが起草し、基本的人権や抵抗権を明確に打ち出した宣言は何か。","a":"アメリカ独立宣言","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":35,"q":"1787年に制定されたアメリカ合衆国憲法が採用した、連邦政府の権力集中を防ぐ政治原理は何か。","a":"三権分立（権力分立）","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":36,"q":"1789年、フランス革命の口火となった、パリ市民による特権の象徴の襲撃事件は何か。","a":"バスティーユ牢獄襲撃","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":37,"q":"1789年8月、フランス国民議会が採択し、自由・平等・主権在民・所有権の不可侵をうたった文書は何か。","a":"フランス人権宣言（人間と市民の権利の宣言）","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":38,"q":"フランス革命中、1792年に王権が停止された後に召集され、一院制で第一共和政を宣言した議会は何か。","a":"国民公会","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":39,"q":"国民公会においてジャコバン派（山岳派）を率い、恐怖政治（テルモール8日のクーデタで倒れるまで）を実施した指導者は誰か。","a":"ロベスピエール","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":40,"q":"1793年、フランス農村部で徴兵令などに反発して起きた、最大規模の王党派・反革命農民反乱は何か。","a":"ヴァンデの反乱","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":41,"q":"1799年のブリュメール18日のクーデタによって総裁政府を倒し、執政政府を樹立した軍人は誰か。","a":"ナポレオン・ボナパルト","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":42,"q":"1806年、ナポレオンがイギリスに対する経済封鎖を目的として発令した勅令は何か。","a":"ベルリン勅令（大陸封鎖令）","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":43,"q":"サン＝ドマング（ハイチ）で黒人奴隷の反乱を率い、1804年の世界初の黒人共和国独立へと道を開いた指導者は誰か。","a":"トゥサン・ルーヴェルチュール","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":44,"q":"ベネズエラ、コロンビア、エクアドルなどの南米北部をスペインから独立させ、「解放者」と称される人物は誰か。","a":"シモン・ボリバル","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":45,"q":"アルゼンチンやチリ、ペルーなど南米南部の独立運動を指導した革命家は誰か。","a":"サン・マルティン","c":"【第3章】大西洋革命と共和政・立憲主義（15題）"},{"id":46,"q":"18世紀以降、オスマン帝国の弱体化に伴い、黒海・地中海への進出を目指すロシアと他列強との間で生じた国際問題を何と呼ぶか。","a":"東方問題","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":47,"q":"1821年に始まり、欧州の自由主義者・ロマン主義者（バイロンら）の支援を受けて1830年に完全独立を果たした運動は何か。","a":"ギリシア独立戦争","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":48,"q":"ギリシア独立戦争の講和条約（1829年）で、ロシアのボスフォラス・ダーダネルス両海峡の通航権などを認めた条約は何か。","a":"アドリアノーブル条約","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":49,"q":"オスマン帝国で1839年から1876年にかけて推進された、西欧化を目指す強範な組織・制度改革（恩恵改革）を何と呼ぶか。","a":"タンジマート","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":50,"q":"タンジマートの開始を宣言し、宗教を問わない全臣民の生命・財産・名誉の保全を約束した詔書は何か。","a":"ギュルハネ勅令","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":51,"q":"1853〜1856年、聖地管理権やギリシア正教徒保護権をめぐり、ロシアとオスマン帝国（英仏が支援）の間で戦われた戦争は何か。","a":"クリミア戦争","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":52,"q":"1876年、オスマン帝国で制定された、アジア初の近代立憲的憲法は何か。","a":"ミドハト憲法","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":53,"q":"1878年のベルリン会議を主導し、「誠実な仲介人」として露土戦争後の利害調整を行ったドイツの宰相は誰か。","a":"ビスマルク","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":54,"q":"1878年のベルリン条約で、オスマン帝国から正式に独立が承認されたバルカン半島の3か国はどこか。","a":"ルーマニア、セルビア、モンテネグロ","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":55,"q":"1908年に運動を起こし、ミドハト憲法の復活と立憲制の導入を実現させた青年将校・知識人の改革派組織は何か。","a":"青年トルコ党（統一と進歩委員会）","c":"【第4章】オスマン帝国の改革と東方問題（10題）"},{"id":56,"q":"清がイギリスとの貿易制限のために広州に限定して設置した、貿易独占権を持つ公認商人組合を何と呼ぶか。","a":"公行（コーホン）","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":57,"q":"イギリスが清との貿易赤字を解消するために、インド産アヘンを介在させた不当な三角貿易構造を何と呼ぶか。","a":"アヘン三角貿易","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":58,"q":"1842年の南京条約で、清がイギリスに割譲し、その後長らくイギリスの植民地となった地域はどこか。","a":"香港島","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":59,"q":"南京条約の追加条約（虎門寨追加条約など）で、清が欧米列強に認めた不平等条約の規定は何か（主要な2つ）。","a":"領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":60,"q":"洪秀全が結成した拝上帝会を母体として起こり、「滅満興漢」や「天朝田畝制度」を掲げて建てられた政権は何か。","a":"太平天国","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":61,"q":"太平天国やアロー戦争の鎮圧にあたって、曽国藩や李鴻章ら漢人官僚が組織した義勇軍組織（郷勇）を何と呼ぶか。","a":"湘軍、淮軍","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":62,"q":"1860年代以降、曽国藩・李鴻章らが主導し、「中体西用」のスローガンのもと西洋技術の導入を進めた富国強兵運動は何か。","a":"洋務運動","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":63,"q":"1894〜1895年の日清戦争の講和条約（下関条約）で、清が日本に割譲した地域はどこか（2つ）。","a":"台湾、遼東半島（※遼東半島は三国干渉で返還）","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":64,"q":"日清戦争後、清の危機感から康有為・梁啓超らが光緒帝を擁して行おうとした、日本の明治維新にならった立憲君主制への改革は何か。","a":"変法自強運動（戊戌の変法）","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":65,"q":"変法運動を弾圧し、光緒帝を幽閉して実権を再び握った保守派の中心人物（皇太后）は誰か。","a":"西太后","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":66,"q":"「扶清滅洋」を掲げて外征軍やキリスト教徒を襲撃し、北清事変を引き起こした宗教的秘密結社運動は何か。","a":"義和団","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":67,"q":"義和団事件後、列強と清の間で結ばれ、北京への外国軍隊駐留権などを認めた協約は何か。","a":"辛丑和約（北京議定書）","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":68,"q":"1905年、孫文が東京で中国同盟会を結成した際に掲げた政治理念（民族・民権・民生）を何と呼ぶか。","a":"三民主義","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":69,"q":"1911年10月10日、四川保路運動（幹線鉄道国有化反対運動）に乗じて新軍が挙兵し、辛亥革命の発端となった地はどこか。","a":"武昌","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":70,"q":"1912年に中華民国臨時大総統に就任したが、清朝皇帝（宣統帝）を退位させる見返りに孫文から実権を譲られた軍閥の首領は誰か。","a":"袁世凱","c":"【第5章】近代東アジアの変革運動と秩序の解体（15題）"},{"id":71,"q":"19世紀後半、欧米列強が金融資本主義を背景に、アジア・アフリカを暴力的に植民地化した時代趨勢を何と呼ぶか。","a":"帝国主義","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":72,"q":"1884〜1885年にビスマルクが主催し、アフリカ分割のルール（実効支配の原則）を定めた会議は何か。","a":"ベルリン会議（アフリカ会議）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":73,"q":"イギリスが推進したアフリカ縦断政策（カイロ〜ケープタウン）とフランスのアフリカ横断政策が衝突した、1898年の事件は何か。","a":"ファショダ事件","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":74,"q":"1899〜1902年、イギリスが鉱物資源（金・ダイヤモンド）を求めて南アフリカのブール人国家を併合した戦争は何か。","a":"南アフリカ戦争（ブール戦争）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":75,"q":"スエズ運河を株式買収によって実質的に支配し、1882年にエジプトを保護国化した国はどこか。","a":"イギリス","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":76,"q":"黒人奴隷制度廃止後、アジア（特に中国・インド）から鉱山や農園の労働力として大量に渡航した契約労働者を何と呼ぶか。","a":"苦力（クーリー）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":77,"q":"アヘン戦争後の天津条約などで公認され、大量の中国人労働者が東南アジア・南北アメリカに渡る契機となった労働形態は何か。","a":"契約移民（苦力貿易）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":78,"q":"19世紀半ば、カリフォルニアで金鉱が発見されたことで世界中から人が殺到した現象を何と呼ぶか。","a":"ゴールドラッシュ","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":79,"q":"1882年、中国人労働者の流入に危機感を募らせたアメリカ連邦議会が制定した、特定の民族排除を目的とした法規は何か。","a":"中国人移民排斥法","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":80,"q":"19世紀後半、オーストラリアで白人優位の社会を保つために非白人（特にアジア系）の移民を極端に制限した政策は何か。","a":"白豪主義","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":81,"q":"イギリスがインドからサトウキビ農園の労働力として、南アフリカやカリブ海地域へ送り込んだ年雇い労働制度を何と呼ぶか。","a":"インデンチャー・レイバー（年期契約労働者制度）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":82,"q":"東南アジアのゴム農園や錫鉱山で、イギリスが南インドからタミル人労働者を調達・管理したあっせん制度を何と呼ぶか。","a":"カンガーニー制度","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":83,"q":"東南アジアへ移住し、現地社会に定着して商業や金融業などで経済的実権を握った中国系住民を何と呼ぶか。","a":"華僑（華人）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":84,"q":"1840年代後半にアイルランドを襲い、約100万人の餓死者と100万人以上の合衆国移民を生み出した災害は何か。","a":"ジャガイモ飢饉","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":85,"q":"19世紀末から20世紀初頭にかけて、アメリカ合衆国へ渡った南欧・東欧系の新移民の主な宗教的背景は何か（2つ）。","a":"カトリック、東方正教（およびユダヤ教）","c":"【第6章】帝国主義と国際労働移動・移民（15題）"},{"id":86,"q":"第1次世界大戦の講和条約（ベルサイユ条約）に基づき、1920年に設立された史上初の国際平和機構は何か。","a":"国際連盟","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":87,"q":"国際連盟の決定的な欠陥として指摘される、大国の不参加（アメリカなど）以外の採決上の原則は何か。","a":"全会一致の原則","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":88,"q":"1928年に米仏の外相が主導して締結され、国際紛争の解決手段としての戦争を放棄することを約した条約は何か。","a":"不戦条約（ケロッグ＝ブリアン協定）","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":89,"q":"1929年10月、ニューヨークのウォール街での株価暴落に始まり、世界中に波及した経済危機を何と呼ぶか。","a":"世界恐慌","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":90,"q":"世界恐慌に対し、イギリスやフランスなどの列強が自国の経済圏を保護し、他国に高い関税を課した閉鎖的な経済体制は何か。","a":"ブロック経済","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":91,"q":"1944年、戦後の国際金融・通貨体制を確立するために開かれた会議で協定された体制を何と呼ぶか。","a":"ブレトンウッズ体制","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":92,"q":"ブレトンウッズ協定に基づいて設立された、固定相場制の維持や加盟国の国際収支不均衡への融資を行う国際機関は何か。","a":"国際通貨基金（IMF）","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":93,"q":"1947年、アメリカ大統領が発表し、「共産主義の封じ込め」を宣言して冷戦を決定づけた外交方針は何か。","a":"トルーマン＝ドクトリン","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":94,"q":"1947年、合衆国国務長官が提唱した、西ヨーロッパの復興と経済安定を目的とした巨額の援助計画は何か。","a":"マーシャル＝プラン","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":95,"q":"マーシャル＝プランに対抗して、ソ連と東欧諸国が1949年に結成した経済協力機構は何か。","a":"コメコン（経済相互援助会議）","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":96,"q":"1949年、ソ連のベルリン封鎖などに対抗して結成された、欧米諸国の集団安全保障機構（軍事同盟）は何か。","a":"NATO（北大西洋条約機構）","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":97,"q":"NATOに対抗して、1955年にソ連と東欧社会主義諸国が結成した軍事同盟体制は何か。","a":"ワルシャワ条約機構","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":98,"q":"1955年、インドのネルーやインドネシアのカルノらが主導し、アジア・アフリカの非同盟諸国が集まった会議は何か。","a":"バンドン会議（第1回アジア・アフリカ会議）","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":99,"q":"1971年、ドルの金引き換え停止を発表し、ブレトンウッズ体制（固定相場制）を崩壊させたアメリカ大統領の発表（ドル＝ショック）は何か。","a":"ニクソン＝ショック","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"},{"id":100,"q":"1989年、米ソの首脳（ブッシュとゴルバチョフ）が会談し、冷戦の終結を世界に宣言した出来事は何か。","a":"マルタ会談","c":"【第7章】20世紀の国際体制・冷戦・経済秩序（15題）"}];
+</script>
+
+<script>
+window.onerror=function(msg,src2,line){
+  try{var e=document.getElementById('errbar');e.style.display='block';
+  e.textContent='エラー: '+msg+' (行'+line+') — この表示をスクリーンショットしてご相談ください';}catch(x){}
+};
+/* ================= FSRS-5 ================= */
+const W=[0.40255,1.18385,3.173,15.69105,7.1949,0.5345,1.4604,0.0046,1.54575,0.1192,1.01925,1.9395,0.11,0.29605,2.2698,0.2315,2.9898,0.51655,0.6621];
+const DECAY=-0.5, FACTOR=Math.pow(0.9,1/DECAY)-1; // =19/81
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const D0=g=>clamp(W[4]-Math.exp(W[5]*(g-1))+1,1,10);
+const S0=g=>Math.max(W[g-1],0.1);
+const retr=(t,S)=>Math.pow(1+FACTOR*t/S,DECAY);
+const nextInterval=(S,rr)=>Math.max(1,Math.round(S/FACTOR*(Math.pow(rr,1/DECAY)-1)));
+function nextD(D,g){
+  const dd=-W[6]*(g-3);
+  let Dp=D+dd*(10-D)/9;
+  return clamp(W[7]*D0(4)+(1-W[7])*Dp,1,10);
+}
+function recallS(D,S,R,g){
+  const hard=g===2?W[15]:1, easy=g===4?W[16]:1;
+  return clamp(S*(1+Math.exp(W[8])*(11-D)*Math.pow(S,-W[9])*(Math.exp(W[10]*(1-R))-1)*hard*easy),0.1,36500);
+}
+function forgetS(D,S,R){
+  return clamp(Math.min(W[11]*Math.pow(D,-W[12])*(Math.pow(S+1,W[13])-1)*Math.exp(W[14]*(1-R)),S),0.1,36500);
+}
+/* 学習ステップ（分）: 新規/再学習 */
+const LEARN_STEPS=[1,10], RELEARN_STEPS=[10];
+const DAY=86400000, MIN=60000;
+
+/* ================= 状態 ================= */
+let S={};          // cardId -> {st,step,D,S,due,last,reps,lapses}
+let CFG={retention:0.9, newPerDay:20, order:'seq',
+         sessionMax:0,      // 1回の学習で出題する問題数（0=無制限）
+         bias:'review',     // 出題傾向 new=未学習優先 / review=復習優先 / mix=ランダム
+         reviewEvery:0};    // N問ごとに復習カードを挿入（0=無効）
+let LOG={date:'',newDone:0,revDone:0,streakDays:0,lastStudy:''};
+let UC=[];         // ユーザー追加カード [{id:'u...',q,a,c,n}]
+let OV={};         // 既存カードの修正内容 id -> {q,a,c,n}
+let DL=[];         // 削除した既存カードのid
+let storageOK=true, storageKind='none', dirty=false, saveTimer=null;
+
+/* ===== 復習履歴（revlog） =====
+   1件 = [カードID, 採点時刻(秒), 評価1-4, 前回からの経過日数, 採点前の状態]
+   本体データとは別キーに保存する。履歴の保存に失敗しても学習状況の保存は妨げない。 */
+const RL_KEY='wh-fsrs-v1-revlog';
+const RL_MAX=50000;        // 上限。超過分は古い順に破棄
+let RL=[], rlDirty=false, rlTimer=null;
+const today=()=>new Date().toISOString().slice(0,10);
+const isUserCard=id=>typeof id==='string'&&id[0]==='u';
+
+/* 保存先の抽象化:
+   1) Claude.ai のプレビュー内では window.storage を使う
+   2) ローカルファイル／実ブラウザ（Documents by Readdle 等）では localStorage を使う
+   どちらも使えない場合のみ、セッション内メモリのみの動作にフォールバックする */
+async function storageGet(key){
+  if(window.storage){
+    return await window.storage.get(key);
+  }
+  try{
+    const v=localStorage.getItem(key);
+    return v!=null?{key,value:v}:null;
+  }catch(e){ throw e; }
+}
+async function storageSet(key,value){
+  if(window.storage){
+    const r=await window.storage.set(key,value);
+    if(!r)throw new Error('保存先がnull応答を返しました（一時的なエラーの可能性）');
+    return r;
+  }
+  try{
+    localStorage.setItem(key,value);
+    return {key,value};
+  }catch(e){ throw e; }
+}
+function safetyBackup(payload){
+  try{ localStorage.setItem('wh-fsrs-v1-backup', payload); return true; }
+  catch(e){ return false; }
+}
+function detectStorageKind(){
+  if(window.storage){storageKind='claude';return true}
+  try{
+    const t='__wh_test__';
+    localStorage.setItem(t,'1');localStorage.removeItem(t);
+    storageKind='local';return true;
+  }catch(e){storageKind='none';return false}
+}
+
+function applyLoadedPayload(value){
+  const o=JSON.parse(value);
+  S=o.s||{};CFG=Object.assign(CFG,o.cfg||{});LOG=Object.assign(LOG,o.log||{});
+  UC=o.uc||[];OV=o.ov||{};DL=o.dl||[];
+  for(const c of UC)CARDS.push(c);
+  for(const id in OV){const c=CARDS.find(x=>String(x.id)===String(id));if(c)Object.assign(c,OV[id]);}
+  if(DL.length){const del=new Set(DL.map(String));
+    for(let i=CARDS.length-1;i>=0;i--){if(del.has(String(CARDS[i].id)))CARDS.splice(i,1);}}
+}
+async function loadState(){
+  storageOK=detectStorageKind();
+  if(!storageOK)return;
+  let applied=false;
+  try{
+    const r=await storageGet('wh-fsrs-v1');
+    if(r&&r.value){ applyLoadedPayload(r.value); applied=true; }
+  }catch(e){/* 初回：キー無し、または保存先エラー */}
+  if(!applied && storageKind==='claude'){
+    try{
+      const bk=localStorage.getItem('wh-fsrs-v1-backup');
+      if(bk){
+        applyLoadedPayload(bk);
+        dirty=true;
+        showPending('⚠️ 前回保存できなかった内容をこの端末から復元しました。再保存を試みています…');
+        ensureBgRetry();
+      }
+    }catch(e){/* 復元できなければ何もしない */}
+  }
+}
+function scheduleSave(){
+  dirty=true;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveState,600);
+}
+function errText(e){
+  if(!e)return '不明なエラー';
+  if(typeof e==='string')return e;
+  if(e.message)return e.message;
+  try{return JSON.stringify(e)}catch(x){return String(e)}
+}
+let bgRetryTimer=null;
+function ensureBgRetry(){
+  if(bgRetryTimer)return;
+  bgRetryTimer=setInterval(async()=>{
+    if(!dirty){clearInterval(bgRetryTimer);bgRetryTimer=null;return}
+    const ok=await saveState();
+    if(ok){
+      clearInterval(bgRetryTimer);bgRetryTimer=null;
+      toast('保存待ちだった内容の保存が完了しました');
+      hidePending();
+    }
+  },8000);
+}
+async function loadRL(){
+  if(!storageOK){RL=[];return}
+  try{
+    const r=await storageGet(RL_KEY);
+    if(r&&r.value){
+      const a=JSON.parse(r.value);
+      RL=Array.isArray(a)?a:[];
+    }
+  }catch(e){ RL=[]; }
+}
+function scheduleSaveRL(){
+  rlDirty=true;
+  clearTimeout(rlTimer);
+  rlTimer=setTimeout(saveRL,1200);
+}
+async function saveRL(){
+  if(!storageOK||!rlDirty)return false;
+  clearTimeout(rlTimer);
+  try{
+    await storageSet(RL_KEY, JSON.stringify(RL));
+    rlDirty=false;
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+function logReview(id,g,c){
+  const now=Date.now();
+  const dt = c.last ? Math.round((now-c.last)/DAY*100)/100 : 0;
+  RL.push([id, Math.floor(now/1000), g, dt, c.st|0]);
+  if(RL.length>RL_MAX) RL.splice(0, RL.length-RL_MAX);
+  scheduleSaveRL();
+}
+function showPending(msg){
+  let p=document.getElementById('pendingBox');
+  if(!p){
+    p=document.createElement('div');
+    p.id='pendingBox';
+    p.style.cssText='position:fixed;left:12px;right:12px;bottom:70px;background:var(--seal-soft);color:var(--seal);border-radius:11px;padding:10px 13px;font-size:12px;line-height:1.6;z-index:40;box-shadow:var(--shadow)';
+    document.body.appendChild(p);
+  }
+  p.innerHTML=(msg||'⚠️ この変更はまだ保存されていません。自動で再試行しています…')
+    +' <button id="pendingRetry" style="margin-left:6px;border:1px solid var(--seal);background:none;color:var(--seal);border-radius:7px;padding:3px 8px;font:inherit;font-size:11px;cursor:pointer">今すぐ再試行</button>';
+  p.style.display='block';
+  const btn=document.getElementById('pendingRetry');
+  if(btn)btn.onclick=async()=>{
+    btn.disabled=true;btn.textContent='再試行中…';
+    const ok=await saveState();
+    if(ok){toast('保存できました');hidePending();}
+    else{btn.disabled=false;btn.textContent='今すぐ再試行';}
+  };
+}
+function hidePending(){
+  const p=document.getElementById('pendingBox');
+  if(p)p.style.display='none';
+}
+let saveInFlight=null;
+async function saveState(){
+  if(!storageOK){
+    showErr('保存先が利用できないため保存できません（設定画面で保存先を確認してください）');
+    return false;
+  }
+  if(!dirty)return true;
+  clearTimeout(saveTimer);
+  if(saveInFlight){
+    await saveInFlight.catch(()=>{});
+    if(!dirty)return true;
+  }
+  const task=(async()=>{
+    const payload=JSON.stringify({s:S,cfg:CFG,log:LOG,uc:UC,ov:OV,dl:DL});
+    let lastErr='';
+    const delays=[500,1200,2500];
+    for(let attempt=1;attempt<=delays.length+1;attempt++){
+      try{
+        await storageSet('wh-fsrs-v1',payload);
+        dirty=false;
+        safetyBackup(payload);
+        return true;
+      }catch(e){
+        lastErr=errText(e);
+        if(attempt<=delays.length)await new Promise(r=>setTimeout(r,delays[attempt-1]));
+      }
+    }
+    const kb=Math.round(payload.length/1024);
+    const backedUp=safetyBackup(payload);
+    showErr('保存に失敗しました（保存先からの応答：'+lastErr+'／データ量 約'+kb+'KB）。'
+      +'このメッセージの内容を教えていただければ原因を特定できます。'
+      +(backedUp?'（このブラウザ内には退避コピーを保存しました）':''));
+    toast('保存に失敗しました。自動で再試行します（詳細は上部の赤帯）');
+    showPending();
+    ensureBgRetry();
+    return false;
+  })();
+  saveInFlight=task;
+  try{
+    return await task;
+  }finally{
+    if(saveInFlight===task)saveInFlight=null;
+  }
+}
+
+/* ================= 採点 ================= */
+function getSt(id){return S[id]||(S[id]={st:0,step:0,D:0,S:0,due:0,last:0,reps:0,lapses:0})}
+function previewIvl(c,g){
+  const now=Date.now();
+  if(c.st===0||c.st===1||c.st===3){
+    const steps=c.st===3?RELEARN_STEPS:LEARN_STEPS;
+    if(g===1)return fmtIvl(steps[0]*MIN);
+    if(g===4)return fmtIvl(nextInterval(c.st===0?S0(4):Math.max(c.S,S0(4)),CFG.retention)*DAY);
+    const ns=c.step+(g===3?1:0);
+    if(g===3&&ns>=steps.length){
+      const s=c.st===0?S0(3):Math.max(c.S,S0(3));
+      return fmtIvl(nextInterval(s,CFG.retention)*DAY);
+    }
+    return fmtIvl(steps[Math.min(g===2?c.step:ns,steps.length-1)]*MIN);
+  }
+  const t=Math.max(0,(now-c.last)/DAY);
+  const R=retr(t,c.S);
+  if(g===1)return fmtIvl(RELEARN_STEPS[0]*MIN);
+  return fmtIvl(nextInterval(recallS(c.D,c.S,R,g),CFG.retention)*DAY);
+}
+function rate(id,g){
+  const c=getSt(id), now=Date.now();
+  const isNew=c.st===0;
+  logReview(id,g,c);
+  if(c.st===0||c.st===1||c.st===3){
+    const steps=c.st===3?RELEARN_STEPS:LEARN_STEPS;
+    if(c.st===0){c.D=D0(g);c.S=S0(g);}
+    if(g===1){c.step=0;c.due=now+steps[0]*MIN;c.st=c.st===3?3:1;}
+    else if(g===2){c.due=now+steps[Math.min(c.step,steps.length-1)]*MIN;c.st=c.st===0?1:c.st;}
+    else if(g===4){
+      c.S=Math.max(c.S,S0(4));c.D=c.D||D0(4);
+      c.st=2;c.step=0;c.due=now+nextInterval(c.S,CFG.retention)*DAY;
+    }else{
+      c.step++;
+      if(c.step>=steps.length){c.st=2;c.step=0;c.S=Math.max(c.S,S0(3));c.D=c.D||D0(3);c.due=now+nextInterval(c.S,CFG.retention)*DAY;}
+      else{c.st=c.st===0?1:c.st;c.due=now+steps[c.step]*MIN;}
+    }
+  }else{
+    const t=Math.max(0,(now-c.last)/DAY), R=retr(t,c.S);
+    if(g===1){
+      c.S=forgetS(c.D,c.S,R);c.D=nextD(c.D,1);c.lapses++;
+      c.st=3;c.step=0;c.due=now+RELEARN_STEPS[0]*MIN;
+    }else{
+      c.S=recallS(c.D,c.S,R,g);c.D=nextD(c.D,g);
+      c.due=now+nextInterval(c.S,CFG.retention)*DAY;
+    }
+  }
+  c.last=now;c.reps++;
+  if(LOG.date!==today()){LOG.date=today();LOG.newDone=0;LOG.revDone=0;}
+  if(isNew)LOG.newDone++;else if(c.st===2||g===1)LOG.revDone++;
+  if(LOG.lastStudy!==today()){
+    const y=new Date(Date.now()-DAY).toISOString().slice(0,10);
+    LOG.streakDays=(LOG.lastStudy===y)?(LOG.streakDays||0)+1:1;
+    LOG.lastStudy=today();
+  }
+  scheduleSave();
+}
+function fmtIvl(ms){
+  const m=ms/MIN;
+  if(m<60)return '<'+Math.max(1,Math.round(m))+'分';
+  if(ms<DAY)return Math.round(ms/3600000)+'時間';
+  const d=ms/DAY;
+  if(d<30)return Math.round(d)+'日';
+  if(d<365)return (d/30.4).toFixed(1).replace(/\.0$/,'')+'ヶ月';
+  return (d/365).toFixed(1).replace(/\.0$/,'')+'年';
+}
+
+/* ================= キュー ================= */
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function isReviewCard(c){
+  const st=S[c.id];
+  return !!st&&(st.st===2||st.st===3);
+}
+function interleaveReview(q,n){
+  if(!(n>0))return q;
+  const out=q.slice();
+  for(let pos=n-1; pos<out.length; pos+=n){
+    if(isReviewCard(out[pos]))continue;
+    let j=-1;
+    for(let k=pos+1;k<out.length;k++){ if(isReviewCard(out[k])){j=k;break} }
+    if(j<0)break;
+    const [card]=out.splice(j,1);
+    out.splice(pos,0,card);
+  }
+  return out;
+}
+function buildQueue(){
+  const now=Date.now();
+  if(LOG.date!==today()){LOG.date=today();LOG.newDone=0;LOG.revDone=0;}
+  const due=[],learn=[],fresh=[];
+  for(const c of CARDS){
+    const st=S[c.id];
+    if(!st||st.st===0){fresh.push(c);continue}
+    if(st.due<=now){(st.st===2?due:learn).push(c)}
+  }
+  due.sort((a,b)=>S[a.id].due-S[b.id].due);
+  learn.sort((a,b)=>S[a.id].due-S[b.id].due);
+  const newLimit=Math.max(0,CFG.newPerDay-LOG.newDone);
+  let newCards=fresh;
+  if(CFG.order==='rand'){newCards=shuffle(fresh.slice());}
+  newCards=newCards.slice(0,newLimit);
+
+  let q;
+  if(CFG.bias==='new'){
+    q=[...newCards, ...learn, ...due];
+  }else if(CFG.bias==='mix'){
+    q=[...learn, ...shuffle([...due, ...newCards])];
+  }else{
+    q=[...learn, ...due, ...newCards];
+  }
+
+  q=interleaveReview(q, CFG.reviewEvery|0);
+
+  const cap=CFG.sessionMax|0;
+  if(cap>0&&q.length>cap)q=q.slice(0,cap);
+
+  return {queue:q, dueN:due.length+learn.length, newN:newCards.length,
+          freshTotal:fresh.length, capped:(cap>0&&(learn.length+due.length+newCards.length)>cap)};
+}
+function futureDue(){
+  const now=Date.now();let n=0;
+  for(const id in S){const c=S[id];if(c.st>0&&c.due>now&&c.due<=now+DAY)n++}
+  return n;
+}
+
+/* ================= UI ================= */
+const $=s=>document.querySelector(s);
+const main=$('#main');
+let view='home', queue=[], qi=0, revealed=false, sessionDone=0, sessionTotal=0;
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function setNav(v){view=v;['home','browse','add','set'].forEach(k=>$('#nav-'+k).classList.toggle('on',k===v))}
+function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function sizeClass(s){return (s||'').length>60?'xlong':(s||'').length>36?'long':''}
+
+/* --- home --- */
+function renderHome(){
+  setNav('home');
+  const {dueN,newN,freshTotal,queue:q0}=buildQueue();
+  const biasName={new:'未学習優先',review:'復習優先',mix:'ランダム'}[CFG.bias]||'復習優先';
+  const learned=Object.values(S).filter(c=>c.st===2).length;
+  const learning=Object.values(S).filter(c=>c.st===1||c.st===3).length;
+  const d=new Date();
+  const wd=['日','月','火','水','木','金','土'][d.getDay()];
+  main.innerHTML=`
+  <div class="notice" id="notice">⚠️ この環境では進捗を保存できません（ブラウザの設定でストレージが無効になっている可能性があります）。進捗はこの画面を閉じるまでのみ保持されます。</div>
+  <div class="hero">
+    <div class="date">${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${wd}）　連続 ${LOG.streakDays||0} 日</div>
+    <div class="counts">
+      <div class="count due"><b>${dueN}</b><span>復習</span></div>
+      <div class="count new"><b>${newN}</b><span>新規</span></div>
+      <div class="count done"><b>${LOG.newDone+LOG.revDone}</b><span>今日学習</span></div>
+    </div>
+    <button class="start" id="startBtn" ${dueN+newN===0?'disabled':''}>${dueN+newN===0?'今日の学習は完了':'学習を始める'}</button>
+  </div>
+  <div class="substat"><span>習得済み <b>${learned}</b></span><span>学習中 <b>${learning}</b></span><span>未着手 <b>${freshTotal}</b></span></div>
+  <div class="substat"><span>明日までの復習予定 <b>${futureDue()}</b> 問</span><span>目標記憶率 <b>${Math.round(CFG.retention*100)}%</b></span></div>
+  <div class="substat"><span>出題傾向 <b>${biasName}</b></span><span>今回の出題 <b>${q0.length}</b> 問${CFG.reviewEvery?`／${CFG.reviewEvery}問ごとに復習`:''}</span></div>`;
+  if(!storageOK)$('#notice').style.display='block';
+  const b=$('#startBtn');
+  if(b&&!b.disabled)b.onclick=startSession;
+}
+
+/* --- review --- */
+function startSession(){
+  const q=buildQueue();
+  queue=q.queue;qi=0;sessionDone=0;sessionTotal=queue.length;revealed=false;
+  renderCard();
+}
+function renderCard(){
+  setNav('home');
+  if(qi>=queue.length){renderFinish();return}
+  let guard=queue.length-qi;
+  while(guard-->0){
+    const st=S[queue[qi].id];
+    const notReady=st&&(st.st===1||st.st===3)&&st.due>Date.now()+2000;
+    if(notReady&&qi<queue.length-1){queue.push(queue.splice(qi,1)[0]);}else break;
+  }
+  const card=queue[qi];
+  const st=getSt(card.id);
+  const isNew=st.st===0;
+  revealed=false;
+  const front=`<div class="chapter-tag">${esc(card.c||'')}</div><div class="q-front ${sizeClass(card.q)}">${esc(card.q)}</div>`;
+  main.innerHTML=`
+  <div class="progress"><i style="width:${sessionTotal?Math.round(sessionDone/sessionTotal*100):0}%"></i></div>
+  <div class="qtags"><span class="${isNew?'tag-new':''}">${isNew?'新規':st.st===2?'復習':'学習中'}</span><span>残り ${queue.length-qi} 問</span></div>
+  <div class="card">
+    <div class="face" id="face">${front}<div class="hint" id="hint">タップして答えを表示</div>
+      <div class="answer detail" id="ans">
+        ${detailHTML(card)}
+        <button class="udel" id="editInReview">この問題を修正・削除</button>
+      </div>
+    </div>
+    <button class="reveal" id="revealBtn">答えを見る</button>
+    <div class="grades" id="grades">
+      <button class="g1"><b>もう一度</b><small>${previewIvl(st,1)}</small></button>
+      <button class="g2"><b>難しい</b><small>${previewIvl(st,2)}</small></button>
+      <button class="g3"><b>普通</b><small>${previewIvl(st,3)}</small></button>
+      <button class="g4"><b>簡単</b><small>${previewIvl(st,4)}</small></button>
+    </div>
+  </div>`;
+  const show=()=>{
+    if(revealed)return;revealed=true;
+    $('#face').firstElementChild.style.display='none';
+    $('#face').children[1].style.display='none'; // hint
+    $('#face').classList.add('revealed');
+    $('#face').scrollTop=0;
+    $('#ans').classList.add('show');
+    $('#revealBtn').style.display='none';
+    $('#grades').classList.add('show');
+  };
+  $('#face').onclick=e=>{if(e.target.id!=='editInReview')show()};
+  $('#revealBtn').onclick=show;
+  $('#editInReview').onclick=e=>{e.stopPropagation();renderEdit(card.id,'review')};
+  document.querySelectorAll('.grades button').forEach((b,i)=>{
+    b.onclick=e=>{e.stopPropagation();
+      rate(card.id,i+1);
+      const st2=S[card.id];
+      if(CFG.bias==='review'&&st2.st!==2&&st2.due<=Date.now()+15*MIN){
+        queue.push(card);
+        sessionTotal++;
+      }
+      sessionDone++;qi++;
+      renderCard();
+    };
+  });
+}
+function renderFinish(){
+  saveState();
+  saveRL();
+  main.innerHTML=`
+  <div class="card"><div class="finish">
+    <div class="bigstamp">終</div>
+    <div><b style="font-size:18px">お疲れさまでした</b><p>今日は ${LOG.newDone} 問の新規と ${LOG.revDone} 回の復習をこなしました。</p></div>
+    <button class="start" style="max-width:240px" id="backBtn">ホームに戻る</button>
+  </div></div>`;
+  $('#backBtn').onclick=renderHome;
+}
+
+/* --- browse --- */
+let bLimit=50, bChapter='';
+function chapterList(){
+  const set=new Set();
+  for(const c of CARDS)if(c.c)set.add(c.c);
+  return Array.from(set);
+}
+function renderBrowse(){
+  setNav('browse');bLimit=50;
+  const chapters=chapterList();
+  main.innerHTML=`<input class="search" id="q" placeholder="問題文・解答で検索" autocomplete="off">
+  ${chapters.length?`<div class="chfilter" id="chf"><button data-c="" class="on">すべて</button>${chapters.map(c=>`<button data-c="${esc(c)}">${esc(c.replace(/^【[^】]+】/,'').replace(/（\d+題）$/,''))}</button>`).join('')}</div>`:''}
+  <div class="blist" id="blist"></div><button class="bmore" id="bmore">さらに表示</button>`;
+  const draw=()=>{
+    const q=$('#q').value.trim().toLowerCase();
+    let hit=CARDS;
+    if(bChapter)hit=hit.filter(c=>c.c===bChapter);
+    if(q)hit=hit.filter(c=>c.q.toLowerCase().includes(q)||c.a.toLowerCase().includes(q)||(c.n||'').toLowerCase().includes(q));
+    const list=hit.slice(0,bLimit);
+    $('#blist').innerHTML=list.map(c=>{
+      const st=S[c.id];
+      let lab='未着手';
+      if(st){lab=st.st===2?('復習 '+fmtIvl(Math.max(0,st.due-Date.now()))):st.st===0?'未着手':'学習中'}
+      const mine=isUserCard(c.id);
+      return `<div class="bitem" data-id="${c.id}"><div class="r1"><span class="qq">${esc(c.q)}</span><span class="st">${mine?'<span class="ulabel">追加分</span>・':''}${lab}</span></div><div class="aa">${esc(c.a)}</div></div>`;
+    }).join('')||'<div style="text-align:center;color:var(--ink-soft);font-size:13px;padding:30px 0">該当する問題がありません</div>';
+    document.querySelectorAll('.bitem').forEach(el=>{
+      el.onclick=()=>showCardDetail(el.dataset.id, 'browse');
+    });
+    $('#bmore').style.display=hit.length>bLimit?'block':'none';
+  };
+  $('#q').oninput=()=>{bLimit=50;draw()};
+  $('#bmore').onclick=()=>{bLimit+=50;draw()};
+  if(chapters.length){
+    document.querySelectorAll('#chf button').forEach(b=>{
+      b.onclick=()=>{bChapter=b.dataset.c;bLimit=50;
+        document.querySelectorAll('#chf button').forEach(x=>x.classList.toggle('on',x===b));
+        draw();};
+    });
+  }
+  draw();
+}
+
+/* --- card detail modal --- */
+function formatNotes(n){
+  if(!n)return '<div class="n-plain" style="color:var(--ink-faint)">（補足は登録されていません）</div>';
+  const parts=String(n).split(/\s*／\s*/).filter(s=>s.trim());
+  if(!parts.length)return `<div class="n-plain">${esc(n)}</div>`;
+  return parts.map(p=>{
+    const t=p.trim();
+    if(/^【.*】/.test(t)){
+      return `<div class="n-note">⚠️ ${esc(t.replace(/^【注意】\s*/,''))}</div>`;
+    }
+    return `<div class="n-plain">${esc(t)}</div>`;
+  }).join('');
+}
+function detailStats(card){
+  const st=S[card.id];
+  const stats=[];
+  if(st&&st.st>0){
+    stats.push(`<div class="mstat">次回復習 <b>${st.due?new Date(st.due).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'}):'-'}</b></div>`);
+    stats.push(`<div class="mstat">復習回数 <b>${st.reps||0}</b></div>`);
+    stats.push(`<div class="mstat">間違えた回数 <b>${st.lapses||0}</b></div>`);
+    if(st.S)stats.push(`<div class="mstat">安定度 <b>${st.S.toFixed(1)}</b></div>`);
+    if(st.D)stats.push(`<div class="mstat">難易度 <b>${st.D.toFixed(1)}</b></div>`);
+  }
+  return stats.length?'<div class="modalStats">'+stats.join('')+'</div>':'';
+}
+function detailHTML(card){
+  return `
+    ${card.c?`<div class="chap-d">${esc(card.c)}</div>`:''}
+    <div class="q-d ${sizeClass(card.q)}">${esc(card.q)}</div>
+    <hr>
+    <div class="a-d">${esc(card.a)||'（解答未登録）'}</div>
+    <div class="n-block">${formatNotes(card.n)}</div>
+    ${detailStats(card)}`;
+}
+function ensureModal(){
+  let ov=document.getElementById('cardModal');
+  if(ov)return ov;
+  ov=document.createElement('div');
+  ov.id='cardModal';
+  ov.className='modalOverlay';
+  ov.innerHTML=`<div class="modalSheet">
+    <div class="modalHead"><span class="tag" id="mTag"></span><button class="modalClose" id="mClose">✕</button></div>
+    <div class="modalBody detail" id="mBody"></div>
+    <div class="modalFoot"><button class="mEdit" id="mEditBtn">編集・削除</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeCardDetail(); });
+  document.getElementById('mClose').onclick=closeCardDetail;
+  return ov;
+}
+function showCardDetail(id, from){
+  const card=CARDS.find(c=>String(c.id)===String(id));
+  if(!card)return;
+  const ov=ensureModal();
+  const st=S[card.id];
+  const stLabel=st?(ST_NAME[st.st]||'未着手'):'未着手';
+  document.getElementById('mTag').textContent=(isUserCard(card.id)?'追加分・':'')+stLabel;
+  document.getElementById('mBody').innerHTML=detailHTML(card);
+  document.getElementById('mEditBtn').onclick=()=>{
+    closeCardDetail();
+    renderEdit(card.id, from==='review'?'review':'browse');
+  };
+  ov.classList.add('show');
+}
+function closeCardDetail(){
+  const ov=document.getElementById('cardModal');
+  if(ov)ov.classList.remove('show');
+}
+
+/* --- add card --- */
+function buildPrompt(q){
+  return `あなたは世界史教育の専門家です。日本の高校世界史・大学受験レベルの一問一答問題集に登録するための情報を作成してください。
+
+対象の問題文: ${q}
+
+【重要】入力者は学習者のため、問題文に誤字や事実誤認、曖昧な表現が含まれる可能性があります。まずこの問題文が世界史の問題として成立しているかを判断してください。
+
+■ 問題として成立しない、または重大な事実誤認がある場合
+{"warn":"（問題文の不備を指摘し、想定される正しい問題文の候補を挙げて説明）","a":"","c":"","n":""}
+の形式で、warn に日本語で説明を書いて返してください。
+
+■ 問題として成立する場合、以下のJSONで返してください:
+{"a":"...","c":"...","n":"...","warn":""}
+
+- a: 解答。簡潔に、固有名詞で。別解がある場合は「、」で並べる。
+- c: この問題が属する時代・分野の見出し（例：「【近代ヨーロッパ】絶対王政と主権国家体制」のように【】付きの短いラベル）。
+- n: 以下を「 ／ 」区切りで含める:
+  ・出来事の背景・意義を1〜2文で説明する解説
+  ・関連する年代・人物・後続の出来事など、覚える助けになる関連知識
+  ・必要であれば【注意】として、紛らわしい類似事項との違いを付記
+- warn: 問題なければ空文字。年代や固有名詞の表記ゆれなど軽微な注意点があれば簡潔に指摘。
+
+JSONオブジェクトのみを出力し、前置き・説明・コードブロック記号は書かないでください。`;
+}
+function renderAdd(){
+  setNav('add');
+  main.innerHTML=`
+  <div class="fpanel">
+    <p class="sinfo" style="margin:0 0 2px"><b>手順①</b> 追加したい問題文を入力してください。</p>
+    <div class="frow"><input id="f-q" placeholder="例：1789年に始まったフランスの市民革命は何か。" autocomplete="off"></div>
+    <button class="fsave" id="askBtn" style="width:100%">Claudeへ送る文を作る</button>
+  </div>
+
+  <div class="fpanel" id="askPanel" style="display:none">
+    <p class="sinfo" style="margin:0 0 2px"><b>手順②</b> 下の文をコピーして、Claudeとの会話に貼り付けて送信してください。</p>
+    <div class="frow"><textarea id="askText" readonly style="min-height:110px;font-size:12px"></textarea></div>
+    <button class="ai-fill" id="askCopy" style="width:100%">この文をコピー</button>
+    <p class="sinfo" style="margin:6px 0 2px"><b>手順③</b> Claudeの返答（JSON）をここに貼り付けて「反映」を押してください。</p>
+    <div class="frow"><textarea id="ansPaste" placeholder='{"a":"...","c":"...","n":"...","warn":""}'></textarea></div>
+    <button class="fsave" id="ansApply" style="width:100%">返答を反映する</button>
+  </div>
+
+  <div class="fpanel" id="cardPanel" style="display:none">
+    <p class="sinfo" style="margin:0 0 2px"><b>手順④</b> 内容を確認・修正して保存してください。</p>
+    <div class="frow"><label>問題文（必須）</label><textarea id="f-q2" style="min-height:70px"></textarea></div>
+    <div class="frow"><label>解答（必須）</label><input id="f-a" placeholder="例：フランス革命" autocomplete="off"></div>
+    <div class="frow"><label>章・分野</label><input id="f-c" placeholder="例：【近代ヨーロッパ】市民革命" autocomplete="off"></div>
+    <div class="frow"><label>解説・補足</label><textarea id="f-n" style="min-height:110px" placeholder="解説や関連知識、【注意】など"></textarea></div>
+    <button class="fsave" id="fSave" style="width:100%">問題を保存</button>
+  </div>
+
+  <p class="sinfo" style="margin-top:10px">Claudeは、解答・分野ラベル・解説と関連知識を返します。問題として成立しない場合は、その旨を指摘します。</p>
+  <div class="spanel" style="margin-top:14px">
+    <div class="srow"><label>追加済み問題<small>あなたが追加した問題：${UC.length} 問</small></label></div>
+  </div>`;
+
+  $('#askBtn').onclick=()=>{
+    const q=$('#f-q').value.trim();
+    if(!q){toast('問題文を入力してください');return}
+    if(CARDS.some(c=>c.q===q)){toast('この問題はすでに登録されています');return}
+    $('#askText').value=buildPrompt(q);
+    $('#askPanel').style.display='block';
+    $('#f-q2').value=q;
+    $('#askPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  $('#askCopy').onclick=async()=>{
+    const t=$('#askText').value;
+    try{
+      await navigator.clipboard.writeText(t);
+      toast('コピーしました。Claudeに貼り付けて送信してください');
+    }catch(e){
+      const ta=$('#askText');ta.focus();ta.select();
+      try{document.execCommand('copy');toast('コピーしました')}
+      catch(x){toast('文を長押しして「すべて選択」→コピーしてください')}
+    }
+  };
+  $('#ansApply').onclick=()=>{
+    const raw=$('#ansPaste').value||'';
+    if(!raw.trim()){toast('Claudeの返答を貼り付けてください');return}
+    const j=extractJSON(raw);
+    if(!j){toast('JSONを読み取れません。{ } を含む返答全体を貼り付けてください');return}
+    if(j.warn&&String(j.warn).trim()){
+      showWarn(String(j.warn).trim());
+    }
+    if(!j.a){
+      toast('この問題は登録できません（上の警告をご確認ください）');
+      $('#cardPanel').style.display='none';
+      return;
+    }
+    if(j.a)$('#f-a').value=j.a;
+    if(j.c)$('#f-c').value=j.c;
+    if(j.n)$('#f-n').value=String(j.n);
+    $('#cardPanel').style.display='block';
+    $('#cardPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+    toast('反映しました。内容を確認して保存してください');
+  };
+  $('#fSave').onclick=saveNewCard;
+}
+function showWarn(msg){
+  let w=document.getElementById('warnBox');
+  if(!w){
+    w=document.createElement('div');
+    w.id='warnBox';
+    w.style.cssText='background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.7;margin-bottom:12px;white-space:pre-wrap';
+    const panel=document.getElementById('askPanel');
+    panel.parentNode.insertBefore(w,panel.nextSibling);
+  }
+  w.textContent='⚠️ '+msg;
+  w.style.display='block';
+  w.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function extractJSON(text){
+  let t=String(text).replace(/```json/gi,'').replace(/```/g,'');
+  const start=t.indexOf('{');
+  if(start<0)return null;
+  const end=t.lastIndexOf('}');
+  if(end<start)return null;
+  let cand=t.slice(start,end+1);
+
+  const direct=tryParse(cand);
+  if(direct)return direct;
+
+  const fixed=normalizeSmartQuotes(cand);
+  const parsed=tryParse(fixed);
+  if(parsed)return parsed;
+
+  const sub=firstObject(fixed) || firstObject(cand);
+  if(sub){
+    const p2=tryParse(sub)||tryParse(normalizeSmartQuotes(sub));
+    if(p2)return p2;
+  }
+  return null;
+}
+function tryParse(s){ try{return JSON.parse(s)}catch(e){return null} }
+
+function normalizeSmartQuotes(s){
+  const DQ=/[\u201C\u201D\u201E\u201F\u2033\u3003\uFF02]/;
+  let out='', inStr=false, esc=false;
+  for(let i=0;i<s.length;i++){
+    let ch=s[i];
+    if(inStr){
+      if(esc){out+=ch;esc=false;continue;}
+      if(ch==='\\'){out+=ch;esc=true;continue;}
+      if(ch==='"'||DQ.test(ch)){
+        let j=i+1; while(j<s.length&&/\s/.test(s[j]))j++;
+        const nx=s[j];
+        if(nx===undefined||nx===','||nx==='}'||nx===']'||nx===':'){
+          out+='"'; inStr=false; continue;
+        }
+        if(ch==='"'){out+='\\"';}
+        else{out+=ch;}
+        continue;
+      }
+      out+=ch; continue;
+    }else{
+      if(ch==='"'||DQ.test(ch)){out+='"';inStr=true;continue;}
+      out+=ch; continue;
+    }
+  }
+  return out;
+}
+function firstObject(t){
+  const start=t.indexOf('{');
+  if(start<0)return null;
+  let depth=0,inStr=false,esc=false;
+  const DQ=/[\u201C\u201D\u201E\u201F\uFF02]/;
+  for(let i=start;i<t.length;i++){
+    const ch=t[i];
+    if(inStr){
+      if(esc)esc=false;
+      else if(ch==='\\')esc=true;
+      else if(ch==='"'||DQ.test(ch))inStr=false;
+    }else{
+      if(ch==='"'||DQ.test(ch))inStr=true;
+      else if(ch==='{')depth++;
+      else if(ch==='}'){depth--;if(depth===0)return t.slice(start,i+1);}
+    }
+  }
+  return null;
+}
+async function saveNewCard(){
+  const q=$('#f-q2').value.trim(), a=$('#f-a').value.trim(),
+        c=$('#f-c').value.trim(), n=$('#f-n').value.trim();
+  if(!q||!a){toast('問題文と解答は必須です');return}
+  if(CARDS.some(x=>x.q===q)){toast('同じ問題がすでに登録されています');return}
+  const btn=$('#fSave'); if(btn){btn.disabled=true;btn.textContent='保存中…';}
+  const card={id:'u'+Date.now(),q,a,c,n};
+  UC.push(card);CARDS.push(card);
+  dirty=true;
+  const ok=await saveState();
+  $('#totalN').textContent=CARDS.length;
+  if(btn){btn.disabled=false;btn.textContent='問題を保存';}
+  if(!ok){
+    toast('問題は追加されましたが、保存はまだ完了していません');
+    renderAdd();
+    return;
+  }
+  toast('問題を追加しました');
+  renderAdd();
+}
+function buildUpdatePrompt(card){
+  return `あなたは世界史教育の専門家です。日本の高校世界史・大学受験レベルの一問一答問題集に既に登録されている以下の問題を、内容を精査して改善してください。
+
+■ 現在登録されている内容
+問題文: ${card.q}
+解答: ${card.a||'（未入力）'}
+章・分野: ${card.c||'（未入力）'}
+解説・補足: ${card.n||'（未入力）'}
+
+■ お願いしたいこと
+1. 解答の検証: 誤りがあれば正しく直す。別解があれば「、」で並べる。
+2. 章・分野ラベルの検証・提案: 【】付きの短いラベルで。
+3. 解説の作成: 出来事の背景・意義の説明と、関連する年代・人物・出来事を「 ／ 」区切りで。必要であれば【注意】として紛らわしい類似事項との違いを付記。
+4. 既存内容の評価: 現在の登録内容に誤りがあれば、何がどう誤っているかを review に日本語で簡潔に書く。問題なければ空文字。
+
+■ 出力形式（JSONオブジェクトのみ。前置き・説明・コードブロック記号は不要）
+{"a":"...","c":"...","n":"（解説と関連知識を「 ／ 」で区切って記載）","review":"（既存内容の問題点。無ければ空文字）"}`;
+}
+function renderEdit(id, from){
+  const card=CARDS.find(c=>String(c.id)===String(id));
+  if(!card){renderBrowse();return}
+  setNav(from==='review'?'home':'browse');
+  main.innerHTML=`
+  <div class="fpanel">
+    <div class="frow"><label>問題文</label><textarea id="e-q" style="min-height:70px"></textarea></div>
+    <div class="frow"><label>解答</label><input id="e-a" autocomplete="off"></div>
+    <div class="frow"><label>章・分野</label><input id="e-c" autocomplete="off"></div>
+    <div class="frow"><label>解説・補足</label><textarea id="e-n" style="min-height:100px"></textarea></div>
+    <div class="fbtns">
+      <button class="ai-fill" id="eCancel">キャンセル</button>
+      <button class="fsave" id="eSave">修正を保存</button>
+    </div>
+  </div>
+
+  <div class="fpanel">
+    <p class="sinfo" style="margin:0 0 2px"><b>Claudeで内容を更新する</b><br>下の文をコピーしてClaudeに送り、返ってきたJSONを貼り付けると、現在の内容と並べて比較できます。</p>
+    <button class="ai-fill" id="upAsk" style="width:100%">Claudeへ送る文を作る</button>
+    <div id="upAskArea" style="display:none">
+      <div class="frow"><textarea id="upText" readonly style="min-height:100px;font-size:12px"></textarea></div>
+      <button class="ai-fill" id="upCopy" style="width:100%">この文をコピー</button>
+      <div class="frow" style="margin-top:10px"><label>Claudeの返答（JSON）を貼り付け</label><textarea id="upPaste" placeholder='{"a":"...","c":"...","n":"...","review":""}'></textarea></div>
+      <button class="fsave" id="upApply" style="width:100%">比較する</button>
+    </div>
+  </div>
+
+  <div id="diffArea"></div>
+
+  <button class="danger" id="eDel">この問題を削除</button>
+  <p class="sinfo" style="margin-top:12px">修正・削除の内容は学習進捗と一緒に保存されます。削除するとこの問題の学習履歴も消えます。</p>`;
+
+  $('#e-q').value=card.q;$('#e-a').value=card.a;$('#e-c').value=card.c||'';$('#e-n').value=card.n||'';
+  const back=()=>{if(from==='review'){renderCard()}else{renderBrowse()}};
+  $('#eCancel').onclick=back;
+  $('#eSave').onclick=async()=>{
+    const q=$('#e-q').value.trim(),a=$('#e-a').value.trim(),
+          c=$('#e-c').value.trim(),n=$('#e-n').value.trim();
+    if(!q||!a){toast('問題文と解答は必須です');return}
+    const b=$('#eSave'); b.disabled=true; b.textContent='保存中…';
+    const r=await applyEdit(card,{q,a,c,n});
+    b.disabled=false; b.textContent='修正を保存';
+    if(r.saved){toast('修正を保存しました');back();}
+    else{toast('修正は反映されましたが、保存はまだ完了していません');back();}
+  };
+  $('#upAsk').onclick=()=>{
+    const cur={q:$('#e-q').value.trim(),a:$('#e-a').value.trim(),
+               c:$('#e-c').value.trim(),n:$('#e-n').value.trim()};
+    if(!cur.q){toast('問題文が空です');return}
+    $('#upText').value=buildUpdatePrompt(cur);
+    $('#upAskArea').style.display='block';
+    $('#upAskArea').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  $('#upCopy').onclick=async()=>{
+    const t=$('#upText').value;
+    try{await navigator.clipboard.writeText(t);toast('コピーしました。Claudeに貼り付けて送信してください')}
+    catch(e){const ta=$('#upText');ta.focus();ta.select();
+      try{document.execCommand('copy');toast('コピーしました')}
+      catch(x){toast('文を長押しして「すべて選択」→コピーしてください')}}
+  };
+  $('#upApply').onclick=()=>{
+    const j=extractJSON($('#upPaste').value||'');
+    if(!j){toast('JSONを読み取れません。{ } を含む返答全体を貼り付けてください');return}
+    renderDiff(card, j, from);
+  };
+  $('#eDel').onclick=()=>{
+    if(!confirm('この問題を削除しますか？学習履歴も消えます。'))return;
+    deleteCard(card.id);
+    toast('削除しました');
+    if(from==='review'){
+      for(let i=queue.length-1;i>=0;i--){if(String(queue[i].id)===String(card.id)){queue.splice(i,1);if(i<qi)qi--;}}
+      sessionTotal=Math.max(sessionTotal-1,sessionDone);
+      renderCard();
+    }else{renderBrowse()}
+  };
+}
+async function applyEdit(card, vals){
+  Object.assign(card, vals);
+  if(isUserCard(card.id)){
+    const u=UC.find(x=>x.id===card.id);
+    if(u)Object.assign(u, vals);
+  }else{
+    OV[card.id]={q:card.q,a:card.a,c:card.c,n:card.n};
+  }
+  dirty=true;
+  const ok=await saveState();
+  if(!ok){
+    return {saved:false};
+  }
+  return {saved:true};
+}
+function renderDiff(card, j, from){
+  const cur={a:$('#e-a').value.trim(), c:$('#e-c').value.trim(), n:$('#e-n').value.trim()};
+  const neu={a:(j.a||'').trim(), c:(j.c||'').trim(), n:(j.n||'').trim()};
+  const fields=[
+    {key:'a', label:'解答'},
+    {key:'c', label:'章・分野'},
+    {key:'n', label:'解説・補足'}
+  ];
+  const review=(j.review||'').trim();
+  let html='<div class="fpanel">';
+  html+='<p class="sinfo" style="margin:0"><b>比較して反映する</b><br>項目ごとに、どう扱うか選んでください。</p>';
+  if(review){
+    html+='<div style="background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.7;white-space:pre-wrap">⚠️ Claudeの指摘：'+esc(review)+'</div>';
+  }
+  for(const f of fields){
+    const oldV=cur[f.key], newV=neu[f.key];
+    const same = oldV===newV;
+    const hasNew = !!newV;
+    html+='<div style="border:1px solid var(--line);border-radius:11px;padding:12px;display:flex;flex-direction:column;gap:8px">';
+    html+='<div style="font-size:12px;font-weight:700;letter-spacing:.04em">'+f.label
+        + (same&&hasNew?'<span style="color:var(--ink-soft);font-weight:400">（変更なし）</span>':'')
+        + (!hasNew?'<span style="color:var(--ink-soft);font-weight:400">（AIの提案なし）</span>':'')
+        + '</div>';
+    html+='<div><div style="font-size:10px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:2px">現在</div>'
+        + '<div style="font-size:13px;background:var(--paper-2);border-radius:8px;padding:8px 10px;line-height:1.7;white-space:pre-wrap;word-break:break-word">'
+        + (oldV?esc(oldV):'<span style="color:var(--ink-faint)">（未入力）</span>')+'</div></div>';
+    if(hasNew && !same){
+      html+='<div><div style="font-size:10px;color:var(--good);letter-spacing:.08em;margin-bottom:2px">Claudeの提案</div>'
+          + '<div style="font-size:13px;background:#EDF5F0;border:1px solid #CFE3D8;border-radius:8px;padding:8px 10px;line-height:1.7;white-space:pre-wrap;word-break:break-word">'
+          + esc(newV)+'</div></div>';
+      html+='<div style="display:flex;gap:6px;flex-wrap:wrap">'
+          + '<button class="dbtn" data-k="'+f.key+'" data-a="keep">現在のまま</button>'
+          + '<button class="dbtn on" data-k="'+f.key+'" data-a="replace">置き換え</button>'
+          + '<button class="dbtn" data-k="'+f.key+'" data-a="append">追記</button>'
+          + '</div>';
+    }
+    html+='<div><div style="font-size:10px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:2px">反映される内容（自由に編集できます）</div>'
+        + '<textarea class="dres" id="d-'+f.key+'" style="width:100%;font:inherit;font-size:13px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);min-height:'+(f.key==='n'?'96px':'44px')+';resize:vertical"></textarea></div>';
+    html+='</div>';
+  }
+  html+='<button class="fsave" id="dSave" style="width:100%">この内容で問題を更新</button>';
+  html+='<button class="ai-fill" id="dCancel" style="width:100%">比較をやめる</button>';
+  html+='</div>';
+  const area=document.getElementById('diffArea');
+  area.innerHTML=html;
+
+  const setVal=(k)=>{
+    const oldV=cur[k], newV=neu[k];
+    const ta=document.getElementById('d-'+k);
+    ta.value=(newV && newV!==oldV) ? newV : oldV;
+  };
+  for(const f of fields)setVal(f.key);
+
+  area.querySelectorAll('.dbtn').forEach(b=>{
+    b.onclick=()=>{
+      const k=b.dataset.k, a=b.dataset.a;
+      area.querySelectorAll('.dbtn[data-k="'+k+'"]').forEach(x=>x.classList.toggle('on', x===b));
+      const ta=document.getElementById('d-'+k);
+      const oldV=cur[k], newV=neu[k];
+      if(a==='keep')ta.value=oldV;
+      else if(a==='replace')ta.value=newV;
+      else if(a==='append')ta.value=oldV ? (oldV+' ／ '+newV) : newV;
+    };
+  });
+  document.getElementById('dCancel').onclick=()=>{area.innerHTML=''};
+  document.getElementById('dSave').onclick=async()=>{
+    const q=$('#e-q').value.trim();
+    const a=document.getElementById('d-a').value.trim();
+    const c=document.getElementById('d-c').value.trim();
+    const n=document.getElementById('d-n').value.trim();
+    if(!q||!a){toast('問題文と解答は必須です');return}
+    const b=document.getElementById('dSave'); b.disabled=true; b.textContent='保存中…';
+    const r=await applyEdit(card,{q,a,c,n});
+    b.disabled=false; b.textContent='この内容で問題を更新';
+    toast(r.saved?'更新しました':'更新は反映されましたが、保存はまだ完了していません');
+    if(from==='review'){renderCard()}else{renderBrowse()}
+  };
+  area.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function deleteCard(id){
+  if(isUserCard(id)){UC=UC.filter(x=>x.id!==id);}
+  else if(!DL.some(d=>String(d)===String(id))){DL.push(id);}
+  const i=CARDS.findIndex(x=>String(x.id)===String(id));
+  if(i>=0)CARDS.splice(i,1);
+  delete S[id];
+  dirty=true;saveState();
+  $('#totalN').textContent=CARDS.length;
+}
+
+/* --- settings --- */
+function renderSet(){
+  setNav('set');
+  main.innerHTML=`
+  <div class="spanel">
+    <div class="srow"><label>1日の新規問題上限<small>復習が多い日は減らすのがおすすめ</small></label>
+      <input type="number" id="s-new" min="0" max="200" value="${CFG.newPerDay}"></div>
+    <div class="srow"><label>目標記憶率<small>高いほど復習間隔が短くなります</small></label>
+      <select id="s-ret">
+        ${[0.8,0.85,0.9,0.95].map(r=>`<option value="${r}" ${CFG.retention===r?'selected':''}>${Math.round(r*100)}%</option>`).join('')}
+      </select></div>
+    <div class="srow"><label>新規問題の順序<small>未学習問題内の並び順</small></label>
+      <select id="s-ord">
+        <option value="seq" ${CFG.order==='seq'?'selected':''}>問題番号順</option>
+        <option value="rand" ${CFG.order==='rand'?'selected':''}>ランダム</option>
+      </select></div>
+  </div>
+
+  <div class="spanel" style="margin-top:14px">
+    <div class="srow"><label>1回の学習で出題する問題数<small>0 で無制限。1日の新規上限を守った上で総数を制限します</small></label>
+      <input type="number" id="s-smax" min="0" max="500" value="${CFG.sessionMax}"></div>
+    <div class="srow"><label>出題傾向<small>未学習問題と復習問題の混ぜ方</small></label>
+      <select id="s-bias">
+        <option value="new" ${CFG.bias==='new'?'selected':''}>未学習優先</option>
+        <option value="review" ${CFG.bias==='review'?'selected':''}>復習優先</option>
+        <option value="mix" ${CFG.bias==='mix'?'selected':''}>ランダム（未学習・復習混在）</option>
+      </select></div>
+    <div class="srow"><label>復習問題を挟む間隔<small>0 で無効。この設定は出題傾向より優先されます</small></label>
+      <input type="number" id="s-revevery" min="0" max="50" value="${CFG.reviewEvery}"></div>
+    <div class="srow" style="flex-direction:column;align-items:stretch;gap:6px;padding-top:4px">
+      <small style="font-size:11px;color:var(--ink-soft);line-height:1.7">
+        「復習優先」のときだけ、間違えた問題が同じ学習内で1分後・10分後に再出題されます。
+        他の傾向では再出題せず、次回以降の学習に回ります。
+      </small>
+    </div>
+  </div>
+
+  <div class="spanel" style="margin-top:14px">
+    <div class="srow" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div><label>CSVで書き出す</label><small style="display:block;font-size:11px;color:var(--ink-soft);margin-top:2px">全 ${CARDS.length} 問を学習進捗つきで保存します。バックアップや他の端末への移行に使えます。</small></div>
+      <button class="fsave" id="csvOut" style="width:100%">CSVファイルをダウンロード</button>
+    </div>
+    <div class="srow" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div><label>CSVを読み込む</label><small style="display:block;font-size:11px;color:var(--ink-soft);margin-top:2px">同じ形式のCSVを取り込みます。問題文が一致する問題は上書きし、無いものは追加します。</small></div>
+      <input type="file" id="csvFile" accept=".csv,text/csv" style="font-size:12px">
+      <div class="srow" style="padding:0;border:none;justify-content:flex-start;gap:8px">
+        <label style="font-size:12px;font-weight:400;display:flex;align-items:center;gap:6px">
+          <input type="checkbox" id="csvProg" checked style="width:auto"> 学習進捗も一緒に取り込む
+        </label>
+      </div>
+      <button class="ai-fill" id="csvIn" style="width:100%">選んだCSVを取り込む</button>
+    </div>
+    <div class="srow" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div><label>復習履歴を書き出す</label><small style="display:block;font-size:11px;color:var(--ink-soft);margin-top:2px">1回ごとの採点記録 ${RL.length.toLocaleString()} 件（上限 ${RL_MAX.toLocaleString()} 件）。分析や将来のパラメータ最適化に使えます。読み込みには対応していません。</small></div>
+      <button class="ai-fill" id="rlOut" style="width:100%">復習履歴のCSVをダウンロード</button>
+    </div>
+  </div>
+
+  <button class="danger" id="resetBtn">学習進捗をすべてリセット</button>
+  <p class="sinfo" style="margin-top:14px">採点は FSRS-5 アルゴリズム（間隔反復の最新方式）で行われ、各問題の「記憶の安定度」と「難易度」から最適な復習日を計算します。進捗は自動保存されます。</p>
+  <p class="sinfo" style="margin-top:8px">現在の保存先：${storageKind==='claude'?'Claudeの会話ストレージ（この会話内でのみ有効）':storageKind==='local'?'このファイル・このブラウザ内（端末のローカル保存）':'保存先なし（保存されません）'}</p>`;
+  $('#s-new').onchange=e=>{CFG.newPerDay=clamp(parseInt(e.target.value)||0,0,200);scheduleSave();toast('保存しました')};
+  $('#s-ret').onchange=e=>{CFG.retention=parseFloat(e.target.value);scheduleSave();toast('保存しました')};
+  $('#s-ord').onchange=e=>{CFG.order=e.target.value;scheduleSave();toast('保存しました')};
+  $('#s-smax').onchange=e=>{
+    CFG.sessionMax=clamp(parseInt(e.target.value)||0,0,500);
+    e.target.value=CFG.sessionMax;scheduleSave();
+    toast(CFG.sessionMax?('1回 '+CFG.sessionMax+' 問に設定しました'):'出題数を無制限にしました');
+  };
+  $('#s-bias').onchange=e=>{CFG.bias=e.target.value;scheduleSave();toast('保存しました')};
+  $('#s-revevery').onchange=e=>{
+    CFG.reviewEvery=clamp(parseInt(e.target.value)||0,0,50);
+    e.target.value=CFG.reviewEvery;scheduleSave();
+    toast(CFG.reviewEvery?(CFG.reviewEvery+' 問ごとに復習を挟みます'):'復習の挿入を無効にしました');
+  };
+  $('#csvOut').onclick=exportCSV;
+  $('#csvIn').onclick=importCSV;
+  $('#rlOut').onclick=exportRevlogCSV;
+  $('#resetBtn').onclick=()=>{
+    if(confirm('本当にすべての学習進捗を削除しますか？復習履歴（'+RL.length.toLocaleString()+' 件）も一緒に削除されます。この操作は取り消せません。')){
+      S={};LOG={date:'',newDone:0,revDone:0,streakDays:0,lastStudy:''};
+      RL=[];rlDirty=true;saveRL();
+      dirty=true;saveState();toast('リセットしました');renderHome();
+    }
+  };
+}
+
+/* ================= CSV ================= */
+function showErr(msg){
+  try{
+    const e=document.getElementById('errbar');
+    if(!e){ console.error(msg); return; }
+    e.style.display='block';
+    e.textContent=msg;
+    setTimeout(()=>{e.style.display='none'},15000);
+  }catch(x){ try{console.error(msg)}catch(y){} }
+}
+const CSV_COLS=['問題文','解答','章・分野','解説・補足','状態','復習予定日','安定度','難易度','復習回数','間違えた回数'];
+const ST_NAME={0:'未着手',1:'学習中',2:'復習',3:'再学習'};
+const ST_CODE={'未着手':0,'学習中':1,'復習':2,'再学習':3};
+
+function csvCell(v){
+  const s=(v==null?'':String(v));
+  return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function baseName(){
+  try{
+    const path=decodeURIComponent(location.pathname||'');
+    const file=(path.split('/').pop()||'').split('\\').pop()||'';
+    const name=file.replace(/\.[^.]*$/,'').trim();
+    return name||'world-history';
+  }catch(e){ return 'world-history'; }
+}
+function stampNow(){
+  const d=new Date(), z=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds());
+}
+function downloadBlob(blob, filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportCSV(){
+  const rows=[CSV_COLS.join(',')];
+  for(const c of CARDS){
+    const st=S[c.id]||{};
+    const due=st.due?new Date(st.due).toISOString():'';
+    rows.push([
+      c.q, c.a, c.c||'', c.n||'',
+      ST_NAME[st.st||0]||'未着手',
+      due,
+      st.S?st.S.toFixed(4):'',
+      st.D?st.D.toFixed(4):'',
+      st.reps||0,
+      st.lapses||0
+    ].map(csvCell).join(','));
+  }
+  const blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const fn=baseName()+'_'+stampNow()+'.csv';
+  downloadBlob(blob, fn);
+  toast(CARDS.length+' 問を '+fn+' に書き出しました');
+}
+const RLOG_COLS=['問題文','問題ID','復習日時','評価','経過日数','復習前の状態'];
+const GRADE_NAME={1:'もう一度',2:'難しい',3:'普通',4:'簡単'};
+function exportRevlogCSV(){
+  if(!RL.length){toast('復習履歴がまだありません');return}
+  const qById={};
+  for(const c of CARDS)qById[c.id]=c.q;
+  const rows=[RLOG_COLS.join(',')];
+  for(const e of RL){
+    const [id,ts,g,dt,st0]=e;
+    rows.push([
+      qById[id]||'（削除済み）',
+      id,
+      new Date(ts*1000).toISOString(),
+      GRADE_NAME[g]||g,
+      dt,
+      ST_NAME[st0]||'未着手'
+    ].map(csvCell).join(','));
+  }
+  const blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const fn=baseName()+'_revlog_'+stampNow()+'.csv';
+  downloadBlob(blob, fn);
+  toast(RL.length+' 件の履歴を書き出しました');
+}
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF)text=text.slice(1);
+  const rows=[]; let row=[], cell='', inQ=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQ){
+      if(ch==='"'){
+        if(text[i+1]==='"'){cell+='"';i++;}
+        else inQ=false;
+      }else cell+=ch;
+    }else{
+      if(ch==='"')inQ=true;
+      else if(ch===','){row.push(cell);cell='';}
+      else if(ch==='\r'){/* skip */}
+      else if(ch==='\n'){row.push(cell);rows.push(row);row=[];cell='';}
+      else cell+=ch;
+    }
+  }
+  if(cell!==''||row.length){row.push(cell);rows.push(row);}
+  return rows.filter(r=>r.some(c=>c.trim()!==''));
+}
+function importCSV(){
+  const f=$('#csvFile').files&&$('#csvFile').files[0];
+  if(!f){toast('CSVファイルを選んでください');return}
+  const withProg=$('#csvProg').checked;
+  const reader=new FileReader();
+  reader.onerror=()=>toast('ファイルを読み込めませんでした');
+  reader.onload=()=>{
+    try{
+      const rows=parseCSV(String(reader.result||''));
+      if(rows.length<2){toast('データ行がありません');return}
+      const head=rows[0].map(h=>h.trim());
+      const ix=name=>head.indexOf(name);
+      const iQ=ix('問題文'), iA=ix('解答'), iC=ix('章・分野'), iN=ix('解説・補足');
+      if(iQ<0||iA<0){
+        toast('形式が違います（「問題文」「解答」列が必要です）');
+        return;
+      }
+      const iSt=ix('状態'), iDue=ix('復習予定日'), iS=ix('安定度'), iD=ix('難易度'),
+            iR=ix('復習回数'), iL=ix('間違えた回数');
+      let added=0, updated=0, prog=0, skipped=0;
+      for(let r=1;r<rows.length;r++){
+        const row=rows[r];
+        const q=(row[iQ]||'').trim();
+        const a=(iA>=0?row[iA]:'' ).trim();
+        if(!q||!a){skipped++;continue}
+        const c=(iC>=0?row[iC]:'').trim();
+        const n=(iN>=0?row[iN]:'').trim();
+        let card=CARDS.find(x=>x.q===q);
+        if(card){
+          card.a=a; card.c=c; card.n=n;
+          if(isUserCard(card.id)){
+            const u=UC.find(x=>x.id===card.id);
+            if(u)Object.assign(u,{q,a,c,n});
+          }else{
+            OV[card.id]={q,a,c,n};
+          }
+          updated++;
+        }else{
+          card={id:'u'+Date.now()+'_'+r, q, a, c, n};
+          UC.push(card); CARDS.push(card);
+          added++;
+        }
+        if(withProg && iSt>=0){
+          const stName=(row[iSt]||'').trim();
+          const stCode=ST_CODE[stName];
+          if(stCode!==undefined && stCode!==0){
+            const dueRaw=(iDue>=0?row[iDue]:'').trim();
+            const dueMs=dueRaw?Date.parse(dueRaw):NaN;
+            const sv=parseFloat(iS>=0?row[iS]:''), dv=parseFloat(iD>=0?row[iD]:'');
+            S[card.id]={
+              st:stCode, step:0,
+              S: isFinite(sv)&&sv>0 ? sv : 1,
+              D: isFinite(dv)&&dv>0 ? clamp(dv,1,10) : 5,
+              due: isFinite(dueMs) ? dueMs : Date.now(),
+              last: Date.now(),
+              reps: parseInt(iR>=0?row[iR]:'0')||0,
+              lapses: parseInt(iL>=0?row[iL]:'0')||0
+            };
+            prog++;
+          }
+        }
+      }
+      dirty=true; saveState();
+      $('#totalN').textContent=CARDS.length;
+      let msg='追加 '+added+' 件、更新 '+updated+' 件';
+      if(withProg)msg+='、進捗 '+prog+' 件';
+      if(skipped)msg+='（不備 '+skipped+' 行は除外）';
+      toast(msg);
+      renderSet();
+    }catch(e){
+      showErr('CSVの取り込みに失敗: '+((e&&e.message)||e));
+      toast('取り込みに失敗しました');
+    }
+  };
+  reader.readAsText(f,'UTF-8');
+}
+
+$('#nav-home').onclick=renderHome;
+$('#nav-browse').onclick=renderBrowse;
+$('#nav-add').onclick=renderAdd;
+$('#nav-set').onclick=renderSet;
+document.addEventListener('visibilitychange',()=>{if(document.hidden){saveState();saveRL();}});
+
+(async()=>{
+  $('#totalN').textContent=CARDS.length;
+  await loadState();
+  await loadRL();
+  $('#totalN').textContent=CARDS.length;
+  renderHome();
+})();
+</script>
+</body>
+</html>
