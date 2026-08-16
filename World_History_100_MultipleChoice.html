@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>世界史4択問題集</title>
+<style>
+:root{
+  --paper:#F6F4EF;
+  --paper-2:#EDEAE2;
+  --ink:#1B2A4A;
+  --ink-soft:#5C6B87;
+  --ink-faint:#C3CAD8;
+  --line:#DCD7CB;
+  --seal:#9E2B25;
+  --seal-soft:#F2E0DE;
+  --good:#2C6149;
+  --good-soft:#DFEDE6;
+  --card:#FFFFFF;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(27,42,74,.06),0 8px 24px rgba(27,42,74,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;height:-webkit-fill-available}
+body{min-height:100%}
+button,input,select,textarea{touch-action:manipulation;font-family:inherit}
+body{
+  font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.6;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  overscroll-behavior:none;
+}
+#app{max-width:560px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px}
+.brand{display:flex;align-items:center;gap:9px}
+.stamp{width:34px;height:34px;border:2px solid var(--seal);color:var(--seal);display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:14px;font-weight:700;line-height:1.1;transform:rotate(-4deg);text-align:center;flex:none}
+.brand h1{font-size:14px;font-weight:700;letter-spacing:.03em}
+.brand small{display:block;font-size:9.5px;color:var(--ink-soft);font-weight:400;letter-spacing:.08em}
+nav{display:flex;gap:1px}
+nav button{background:none;border:none;font:inherit;font-size:11.5px;color:var(--ink-soft);padding:7px 7px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--paper)}
+main{flex:1;display:flex;flex-direction:column;padding:6px 18px 28px}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:12px}
+.hero .date{font-size:11px;letter-spacing:.12em;color:var(--ink-soft);margin-bottom:14px}
+.counts{display:flex}
+.count{flex:1;text-align:center;position:relative}
+.count+.count::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--line)}
+.count b{display:block;font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15}
+.count.due b{color:var(--seal)}
+.count.done b{color:var(--good)}
+.count span{font-size:11px;color:var(--ink-soft);letter-spacing:.06em}
+.start{width:100%;margin-top:18px;border:none;border-radius:12px;background:var(--ink);color:var(--paper);font:inherit;font-size:16px;font-weight:700;padding:15px;cursor:pointer;letter-spacing:.05em}
+.start:active{transform:scale(.985)}
+.start:disabled{background:var(--ink-faint);color:#fff}
+.substat{display:flex;justify-content:space-between;background:var(--paper-2);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--ink-soft);margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.substat b{color:var(--ink);font-variant-numeric:tabular-nums}
+.notice{font-size:11px;color:var(--seal);background:var(--seal-soft);border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none;line-height:1.6}
+.sect{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);margin:16px 0 8px}
+.progress{height:3px;background:var(--paper-2);border-radius:2px;margin:4px 0 12px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--ink);border-radius:2px;transition:width .25s}
+.qtags{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-bottom:8px}
+.qtags .tag-new{color:var(--seal);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.body{flex:1;padding:20px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.kind{display:inline-block;font-size:10px;letter-spacing:.1em;color:var(--seal);border:1px solid var(--seal);border-radius:5px;padding:2px 7px;margin-bottom:12px}
+.stem{font-size:16px;line-height:1.85;margin-bottom:16px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 14px;font:inherit;font-size:14px;line-height:1.6;cursor:pointer;color:var(--ink);display:flex;gap:9px}
+.opt .num{color:var(--ink-soft);font-size:12px;flex:none;padding-top:2px}
+.opt:active{background:var(--paper-2)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.ng{border-color:var(--seal);background:var(--seal-soft)}
+.opt[disabled]{cursor:default}
+.ansbox{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:none}
+.ansbox.show{display:block}
+.ansline{font-size:15px;line-height:1.8;margin-bottom:8px}
+.ansline .lab{font-size:10px;letter-spacing:.1em;color:var(--ink-soft);display:block;margin-bottom:2px}
+.ansline b{color:var(--good)}
+.ex{font-size:13px;line-height:1.85;color:var(--ink-soft);background:var(--paper-2);border-radius:9px;padding:11px 13px;margin-top:10px}
+.chaptag{font-size:11px;color:var(--ink-soft);margin-top:8px}
+.reveal{border:none;border-top:1px solid var(--line);background:var(--card);font:inherit;font-size:15px;font-weight:700;color:var(--ink);padding:16px;cursor:pointer;letter-spacing:.08em}
+.grades{display:none;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.grades.show{display:grid}
+.grades button{border:none;background:var(--card);font:inherit;padding:11px 3px 13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink)}
+.grades button+button{border-left:1px solid var(--line)}
+.grades b{font-size:12px;font-weight:700}
+.grades small{font-size:10px;color:var(--ink-soft)}
+.grades .g1 b{color:var(--seal)}
+.grades .g4 b{color:var(--good)}
+.editlink{border:none;background:none;color:var(--ink-soft);font:inherit;font-size:11px;cursor:pointer;text-decoration:underline;margin-top:14px;padding:0}
+.fin{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 20px;text-align:center}
+.fin h2{font-size:19px;margin-bottom:8px}
+.fin p{font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:8px;font-size:13px}
+.row label{color:var(--ink-soft);font-size:12px}
+.row input[type=number],.row select{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;font-size:14px;background:var(--card);color:var(--ink);width:110px;text-align:right}
+.row select{width:150px;text-align:left}
+.tog{display:flex;flex-wrap:wrap;gap:7px}
+.tog button{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:9px;padding:8px 12px;font:inherit;font-size:12px;cursor:pointer}
+.tog button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.li{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:7px;font-size:13px;line-height:1.7;cursor:pointer}
+.li .top{display:flex;justify-content:space-between;gap:8px;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:4px}
+.li .w{color:var(--seal);font-weight:700}
+.li .det{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:12.5px}
+.li.open .det{display:block}
+.li .det .eb{margin-top:8px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;font-size:11.5px;cursor:pointer}
+.ulabel{color:var(--seal);font-weight:700}
+.search{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:inherit;font-size:15px;margin-bottom:10px;background:var(--card);color:var(--ink)}
+.search:focus{outline:none;border-color:var(--ink)}
+.danger{width:100%;border:1px solid var(--seal);background:none;color:var(--seal);border-radius:11px;padding:12px;font:inherit;font-size:13px;cursor:pointer;margin-top:6px}
+.ghost{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:11px;padding:12px;font:inherit;font-size:13px;cursor:pointer;margin-top:6px}
+.fpanel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:11px;margin-bottom:14px}
+.fpanel .hd{font-size:12.5px;line-height:1.75;color:var(--ink-soft)}
+.fpanel .hd b{color:var(--ink)}
+.frow label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-bottom:4px;letter-spacing:.04em}
+.frow input,.frow textarea,.frow select{
+  width:100%;font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:10px;background:var(--paper);color:var(--ink);outline:none;
+}
+.frow textarea{resize:vertical;min-height:64px;font-size:14px;line-height:1.7}
+.frow input:focus,.frow textarea:focus,.frow select:focus{border-color:var(--ink-soft)}
+.optrow{display:flex;gap:8px;align-items:center}
+.optrow input[type=radio]{width:18px;height:18px;accent-color:var(--good);flex:none}
+.optrow input[type=text]{flex:1}
+.fbtn{width:100%;border:none;background:var(--ink);color:var(--paper);font:inherit;font-size:14px;font-weight:700;border-radius:11px;padding:13px;cursor:pointer}
+.fbtn2{width:100%;border:1px solid var(--ink);background:none;color:var(--ink);font:inherit;font-size:14px;font-weight:600;border-radius:11px;padding:13px;cursor:pointer}
+.warnbox{background:var(--seal-soft);color:var(--seal);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.75;white-space:pre-wrap}
+.dfield{border:1px solid var(--line);border-radius:11px;padding:12px;display:flex;flex-direction:column;gap:8px;margin-bottom:10px;background:var(--card)}
+.dlab{font-size:12px;font-weight:700;letter-spacing:.04em}
+.dlab span{color:var(--ink-soft);font-weight:400;font-size:11px}
+.dsub{font-size:10px;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:2px}
+.dsub.new{color:var(--good)}
+.dcur{font-size:13px;background:var(--paper-2);border-radius:8px;padding:8px 10px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.dnew{font-size:13px;background:var(--good-soft);border:1px solid #CFE3D8;border-radius:8px;padding:8px 10px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.dempty{color:var(--ink-faint)}
+.dmark{color:var(--good);font-weight:700}
+.dbtns{display:flex;gap:6px;flex-wrap:wrap}
+.dbtn{flex:1;min-width:78px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:12px;color:var(--ink-soft);border-radius:9px;padding:8px 6px;cursor:pointer}
+.dbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+.dbtn:active{transform:scale(.97)}
+.dres textarea,.dres input[type=text]{width:100%;font:inherit;font-size:13px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);outline:none}
+.dres textarea{resize:vertical;line-height:1.7}
+.dres .optrow{margin-bottom:6px}
+input[type=file]{width:100%;font:inherit;font-size:12px;padding:9px;border:1px dashed var(--line);border-radius:10px;background:var(--paper);color:var(--ink-soft)}
+input[type=file]::-webkit-file-upload-button{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);padding:6px 12px;margin-right:10px;cursor:pointer}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--ink)}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(14px);background:var(--ink);color:var(--paper);font-size:12.5px;padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:60;max-width:88%;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#errbar{display:none;background:var(--seal);color:#fff;font-size:11px;padding:8px 12px;line-height:1.6}
+.bar{height:6px;background:var(--paper-2);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--good)}
+</style>
+</head>
+<body>
+<div id="errbar"></div>
+<div id="app">
+  <header>
+    <div class="brand">
+      <div class="stamp">史</div>
+      <div><h1>世界史4択問題集</h1><small>全<span id="totalN">0</span>問 / FSRS</small></div>
+    </div>
+    <nav>
+      <button id="nav-home">学習</button>
+      <button id="nav-list">一覧</button>
+      <button id="nav-add">追加</button>
+      <button id="nav-stat">記録</button>
+      <button id="nav-set">設定</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+<div id="toast"></div>
+<script>
+const QS=[{"id":"m001","t":"mc","q":"1648年に締結され、各諸侯に主権を認め「主権国家体制（ウェストファリア体制）」の確立の契機となった条約は何か。","o":["フランクフルト国民議会","ポーランド分割","ウェストファリア条約","コシチュシコ"],"a":2,"c":"【第1章】欧州主権国家体制の形成と変容","w":"ウェストファリア条約","ex":"三十年戦争の講和。神聖ローマ帝国は事実上解体した。"},{"id":"m002","t":"mc","q":"ウェストファリア条約によって独立が正式に承認された、北海交易で繁栄した新興国家はどこか（2つ）。","o":["ジブラルタル（およびミノルカ島）","オランダ（ネーデルラント連邦共和国）、スイス","アシエント（奴隷供給契約）","ブルシェンシャフト運動"],"a":1,"c":"【第1章】欧州主権国家体制の形成と変容","w":"オランダ（ネーデルラント連邦共和国）、スイス","ex":"独立は事実上以前から。この条約で国際的に承認された。"},{"id":"m003","t":"mc","q":"1713年のユトレヒト条約で、イギリスがスペインから獲得し、地中海進出の拠点とした戦略的要衝はどこか。","o":["ジブラルタル（およびミノルカ島）","メッテルニヒ","ブルシェンシャフト運動","オランダ（ネーデルラント連邦共和国）、スイス"],"a":0,"c":"【第1章】欧州主権国家体制の形成と変容","w":"ジブラルタル（およびミノルカ島）","ex":"現在も英領。地中海の出入口を押さえる要衝。"},{"id":"m004","t":"mc","q":"1713年のユトレヒト条約で、イギリスがスペインから獲得した、黒人奴隷を供給する独占的権利を何と呼ぶか。","o":["外交革命","アシエント（奴隷供給契約）","ポーランド分割","ジブラルタル（およびミノルカ島）"],"a":1,"c":"【第1章】欧州主権国家体制の形成と変容","w":"アシエント（奴隷供給契約）","ex":"スペイン領植民地への黒人奴隷供給の独占権。"},{"id":"m005","t":"mc","q":"1756年にオーストリアのハプスブルク家が、プロイセンに対抗するために長年の宿敵であったフランス・ブルボン家と結んだ同盟（外交的転換）を何と呼ぶか。","o":["外交革命","ブルシェンシャフト運動","アシエント（奴隷供給契約）","ウェストファリア条約"],"a":0,"c":"【第1章】欧州主権国家体制の形成と変容","w":"外交革命","ex":"墺仏の宿敵関係を転換。七年戦争の前提となった。"},{"id":"m006","t":"mc","q":"シュレジエンの奪還を目指したシュレジエン戦争・七年戦争におけるプロイセンの国王は誰か。","o":["小ドイツ主義","フリードリヒ2世（フリードリヒ大王）","メッテルニヒ","ブルシェンシャフト運動"],"a":1,"c":"【第1章】欧州主権国家体制の形成と変容","w":"フリードリヒ2世（フリードリヒ大王）","ex":"啓蒙専制君主。「君主は国家第一の僕」と称した。"},{"id":"m007","t":"mc","q":"イギリスとフランスの植民地争奪戦において、北米での七年戦争と並行して戦われた戦いは何か。","o":["ウェストファリア条約","ブルシェンシャフト運動","フランクフルト国民議会","フレンチ・インディアン戦争"],"a":3,"c":"【第1章】欧州主権国家体制の形成と変容","w":"フレンチ・インディアン戦争","ex":"七年戦争の北米戦線。英が勝利し北米の覇権を握る。"},{"id":"m008","t":"mc","q":"1763年のパリ条約で、イギリスがフランスから獲得した北米の地域はどこか（主要な2つ）。","o":["カナダ、ミシシッピ川以東のルイジアナ","ベルギー","フランクフルト国民議会","小ドイツ主義"],"a":0,"c":"【第1章】欧州主権国家体制の形成と変容","w":"カナダ、ミシシッピ川以東のルイジアナ","ex":"仏は北米大陸の領土をほぼ喪失した。"},{"id":"m009","t":"mc","q":"1772年、1793年、1795年の3回にわたり、ロシア・プロイセン・オーストリアによって実施された領土分割を何と呼ぶか。","o":["小ドイツ主義","フランクフルト国民議会","アシエント（奴隷供給契約）","ポーランド分割"],"a":3,"c":"【第1章】欧州主権国家体制の形成と変容","w":"ポーランド分割","ex":"3回の分割でポーランドは地図上から消滅した。"},{"id":"m010","t":"mc","q":"ポーランド分割に抵抗して義勇軍を率いて抵抗運動を展開した、アメリカ独立戦争にも参加したポーランドの愛国者は誰か。","o":["コシチュシコ","ブルシェンシャフト運動","小ドイツ主義","アシエント（奴隷供給契約）"],"a":0,"c":"【第1章】欧州主権国家体制の形成と変容","w":"コシチュシコ","ex":"1794年に蜂起を指導するも鎮圧された。"},{"id":"m011","t":"mc","q":"ウィーン会議（1814〜1815年）を主導し、欧州の勢力均衡と正統主義を重んじたオーストリアの外相（後に宰相）は誰か。","o":["ベルギー","メッテルニヒ","アシエント（奴隷供給契約）","ジブラルタル（およびミノルカ島）"],"a":1,"c":"【第1章】欧州主権国家体制の形成と変容","w":"メッテルニヒ","ex":"ウィーン体制の主導者。1848年三月革命で失脚。"},{"id":"m012","t":"mc","q":"メッテルニヒらの反動体制に対し、ドイツの学生組合が結成し、自由と統一を求めて起こした運動は何か。","o":["ウェストファリア条約","アシエント（奴隷供給契約）","フリードリヒ2世（フリードリヒ大王）","ブルシェンシャフト運動"],"a":3,"c":"【第1章】欧州主権国家体制の形成と変容","w":"ブルシェンシャフト運動","ex":"カールスバート決議によって弾圧された。"},{"id":"m013","t":"mc","q":"1830年の7月革命の影響を受けて起こり、1831年にオランダから独立を果たした立憲君主国はどこか。","o":["ベルギー","ジブラルタル（およびミノルカ島）","コシチュシコ","カナダ、ミシシッピ川以東のルイジアナ"],"a":0,"c":"【第1章】欧州主権国家体制の形成と変容","w":"ベルギー","ex":"カトリック・工業地帯。のち永世中立国となる。"},{"id":"m014","t":"mc","q":"1848年の「諸国民の春」の中で、ドイツ統一と憲法制定を議論するために開かれた全ドイツの代表者会議は何か。","o":["ベルギー","ウェストファリア条約","ジブラルタル（およびミノルカ島）","フランクフルト国民議会"],"a":3,"c":"【第1章】欧州主権国家体制の形成と変容","w":"フランクフルト国民議会","ex":"統一に失敗し「言葉と紙の革命」と揶揄された。"},{"id":"m015","t":"mc","q":"ドイツ統一の手法をめぐり、オーストリアを除外してプロイセンを中心に統一を図ろうとする立場を何と呼ぶか。","o":["フランクフルト国民議会","小ドイツ主義","ジブラルタル（およびミノルカ島）","アシエント（奴隷供給契約）"],"a":1,"c":"【第1章】欧州主権国家体制の形成と変容","w":"小ドイツ主義","ex":"対する大ドイツ主義はオーストリアを含む統一案。"},{"id":"m016","t":"mc","q":"16世紀半ばにボリビアで発見され、大量の銀が掘り出されてヨーロッパやアジアへ流出した有名な銀山は何か。","o":["中道航路（ミドル・パッセージ）","ポトシ銀山","環大西洋貿易（三角貿易）","『国富論』（『諸国民の富』）"],"a":1,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"ポトシ銀山","ex":"先住民をミタ制で酷使。銀は明にも大量流入した。"},{"id":"m017","t":"mc","q":"アメリカ大陸から大量の銀がヨーロッパに流入したことで激しいインフレーションが起こり、固定地代に頼る領主層が打撃を受けた現象を何と呼ぶか。","o":["ディーワーニー（租税徴収権）","中道航路（ミドル・パッセージ）","環大西洋貿易（三角貿易）","価格革命"],"a":3,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"価格革命","ex":"物価が2〜3倍に高騰し、封建領主層が没落した。"},{"id":"m018","t":"mc","q":"16世紀後半から、スペインがフィリピンのマニラとメキシコのアカプルコの間で太平洋を横断して行った交易を何と呼ぶか。","o":["産業革命","中道航路（ミドル・パッセージ）","ガレオン貿易（アカプルコ貿易）","プラッシーの戦い"],"a":2,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"ガレオン貿易（アカプルコ貿易）","ex":"メキシコ銀がアジアへ流出する主要経路となった。"},{"id":"m019","t":"mc","q":"明代後半に導入され、地銀と丁銀を一括して銀で納入させる税制改革を何と呼ぶか。","o":["一条鞭法","航海法（航海条例）","地丁銀制","中道航路（ミドル・パッセージ）"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"一条鞭法","ex":"明代の銀納化の始まり。清の地丁銀制へ発展する。"},{"id":"m020","t":"mc","q":"清代に導入され、人頭税（丁税）を固定化して地銀（土地税）の中に組み込んで一括銀納させた税制を何と呼ぶか。","o":["ポトシ銀山","地丁銀制","一条鞭法","環大西洋貿易（三角貿易）"],"a":1,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"地丁銀制","ex":"人頭税が消えたため清代に人口が急増した。"},{"id":"m021","t":"mc","q":"ヨーロッパの製造品、アフリカの黒人奴隷、アメリカの砂糖・タバコ・綿花を循環させた大西洋の貿易構造を何と呼ぶか。","o":["ディーワーニー（租税徴収権）","産業革命","環大西洋貿易（三角貿易）","一条鞭法"],"a":2,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"環大西洋貿易（三角貿易）","ex":"英リヴァプール等が繁栄。産業革命の資本源に。"},{"id":"m022","t":"mc","q":"大西洋三角貿易において、アフリカからアメリカ大陸へ黒人奴隷を輸送する絶望的な航路を何と呼ぶか。","o":["価格革命","一条鞭法","中道航路（ミドル・パッセージ）","バタヴィア"],"a":2,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"中道航路（ミドル・パッセージ）","ex":"劣悪な船内環境で死亡率が極めて高かった。"},{"id":"m023","t":"mc","q":"17世紀にオランダが東洋貿易の拠点としてジャワ島に建設した要塞都市（現在のジャカルタ）はどこか。","o":["価格革命","バタヴィア","中道航路（ミドル・パッセージ）","『国富論』（『諸国民の富』）"],"a":1,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"バタヴィア","ex":"オランダ東インド会社の東洋支配の拠点。"},{"id":"m024","t":"mc","q":"1651年、イギリスがオランダの中継貿易を排除・打撃を与える目的で発布した法律は何か。","o":["航海法（航海条例）","価格革命","中道航路（ミドル・パッセージ）","東インド会社"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"航海法（航海条例）","ex":"英蘭戦争の原因となる。1849年に廃止。"},{"id":"m025","t":"mc","q":"重商主義政策のもと、国家が設立して東インド方面での貿易独占権を与えられた国策会社を何と呼ぶか。","o":["東インド会社","地丁銀制","価格革命","一条鞭法"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"東インド会社","ex":"英は1600年設立。のちインド統治機関へ変質。"},{"id":"m026","t":"mc","q":"1757年、イギリス東インド会社がフランス・ベンガル太守の連合軍を破り、インドでの覇権を確立した戦いは何か。","o":["プラッシーの戦い","地丁銀制","『国富論』（『諸国民の富』）","ポトシ銀山"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"プラッシーの戦い","ex":"クライヴが指揮。英のインド支配の起点となる。"},{"id":"m027","t":"mc","q":"プラッシーの戦い以降、イギリス東インド会社がベンガル地方などで獲得した「征服地からの租税徴収権」を何と呼ぶか。","o":["ディーワーニー（租税徴収権）","環大西洋貿易（三角貿易）","ラッダイト運動","航海法（航海条例）"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"ディーワーニー（租税徴収権）","ex":"ムガル皇帝から獲得。植民地支配の財源となった。"},{"id":"m028","t":"mc","q":"アダム・スミスが1776年に著し、重商主義・統制経済を批判して自由放任主義（レッセ・フェール）を提唱した著作は何か。","o":["バタヴィア","『国富論』（『諸国民の富』）","一条鞭法","プラッシーの戦い"],"a":1,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"『国富論』（『諸国民の富』）","ex":"「見えざる手」を説く。古典派経済学の出発点。"},{"id":"m029","t":"mc","q":"18世紀半ばに綿工業を中心にイギリスで始まり、世界初の工業化を推進した技術革新と社会変革を何と呼ぶか。","o":["産業革命","航海法（航海条例）","『国富論』（『諸国民の富』）","ガレオン貿易（アカプルコ貿易）"],"a":0,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"産業革命","ex":"蒸気機関と綿工業から。資本主義体制が確立。"},{"id":"m030","t":"mc","q":"産業革命期のイギリスにおいて、綿織物機械の発明によって職を失った手織り職人らが起こした機械破壊運動を何と呼ぶか。","o":["価格革命","バタヴィア","ラッダイト運動","東インド会社"],"a":2,"c":"【第2章】大西洋環流・銀とグローバル経済・交易網","w":"ラッダイト運動","ex":"1810年代に発生。失業の原因を機械に求めた。"},{"id":"m031","t":"mc","q":"1765年にイギリス本国がアメリカ植民地に課した、印刷物全般に印紙の貼付を義務付けた法は何か。","o":["ナポレオン・ボナパルト","「代表なくして課税なし」","ロベスピエール","印紙法"],"a":3,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"印紙法","ex":"猛反発を受け翌年撤回。本国との抗争の始まり。"},{"id":"m032","t":"mc","q":"アメリカ植民地側が本国の不当な課税に対して唱えた、代表権と課税の結びつきを示すスローガンは何か。","o":["「代表なくして課税なし」","アメリカ独立宣言","印紙法","シモン・ボリバル"],"a":0,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"「代表なくして課税なし」","ex":"パトリック・ヘンリらが唱えた抵抗のスローガン。"},{"id":"m033","t":"mc","q":"1776年にトマス・ペインが著し、君主制の不合理を説いてアメリカ独立の必要性を広めたパンフレットは何か。","o":["ロベスピエール","アメリカ独立宣言","ナポレオン・ボナパルト","『コモン・センス』（『常識』）"],"a":3,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"『コモン・センス』（『常識』）","ex":"平易な文章で独立世論を一気に高めた。"},{"id":"m034","t":"mc","q":"1776年7月4日、トマス・ジェファーソンらが起草し、基本的人権や抵抗権を明確に打ち出した宣言は何か。","o":["ベルリン勅令（大陸封鎖令）","アメリカ独立宣言","「代表なくして課税なし」","ヴァンデの反乱"],"a":1,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"アメリカ独立宣言","ex":"ロックの思想を反映。奴隷制には言及しなかった。"},{"id":"m035","t":"mc","q":"1787年に制定されたアメリカ合衆国憲法が採用した、連邦政府の権力集中を防ぐ政治原理は何か。","o":["ベルリン勅令（大陸封鎖令）","トゥサン・ルーヴェルチュール","サン・マルティン","三権分立（権力分立）"],"a":3,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"三権分立（権力分立）","ex":"モンテスキューの影響。連邦主義も同時に採用。"},{"id":"m036","t":"mc","q":"1789年、フランス革命の口火となった、パリ市民による特権の象徴の襲撃事件は何か。","o":["ナポレオン・ボナパルト","印紙法","バスティーユ牢獄襲撃","国民公会"],"a":2,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"バスティーユ牢獄襲撃","ex":"7月14日。現在のフランス革命記念日にあたる。"},{"id":"m037","t":"mc","q":"1789年8月、フランス国民議会が採択し、自由・平等・主権在民・所有権の不可侵をうたった文書は何か。","o":["シモン・ボリバル","ナポレオン・ボナパルト","フランス人権宣言（人間と市民の権利の宣言）","三権分立（権力分立）"],"a":2,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"フランス人権宣言（人間と市民の権利の宣言）","ex":"ラファイエットらが起草。近代人権思想の原型。"},{"id":"m038","t":"mc","q":"フランス革命中、1792年に王権が停止された後に召集され、一院制で第一共和政を宣言した議会は何か。","o":["「代表なくして課税なし」","バスティーユ牢獄襲撃","国民公会","ロベスピエール"],"a":2,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"国民公会","ex":"男性普通選挙で選出。ルイ16世を処刑した。"},{"id":"m039","t":"mc","q":"国民公会においてジャコバン派（山岳派）を率い、恐怖政治（テルモール8日のクーデタで倒れるまで）を実施した指導者は誰か。","o":["ベルリン勅令（大陸封鎖令）","サン・マルティン","『コモン・センス』（『常識』）","ロベスピエール"],"a":3,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"ロベスピエール","ex":"徳と恐怖の政治。テルミドール9日に処刑された。"},{"id":"m040","t":"mc","q":"1793年、フランス農村部で徴兵令などに反発して起きた、最大規模の王党派・反革命農民反乱は何か。","o":["ナポレオン・ボナパルト","ヴァンデの反乱","三権分立（権力分立）","バスティーユ牢獄襲撃"],"a":1,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"ヴァンデの反乱","ex":"徴兵制と反教会政策への農民の反発が背景。"},{"id":"m041","t":"mc","q":"1799年のブリュメール18日のクーデタによって総裁政府を倒し、執政政府を樹立した軍人は誰か。","o":["ナポレオン・ボナパルト","アメリカ独立宣言","バスティーユ牢獄襲撃","サン・マルティン"],"a":0,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"ナポレオン・ボナパルト","ex":"1804年に皇帝即位し第一帝政を樹立した。"},{"id":"m042","t":"mc","q":"1806年、ナポレオンがイギリスに対する経済封鎖を目的として発令した勅令は何か。","o":["三権分立（権力分立）","ロベスピエール","ベルリン勅令（大陸封鎖令）","印紙法"],"a":2,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"ベルリン勅令（大陸封鎖令）","ex":"効果は薄くロシアが離反、遠征失敗の一因に。"},{"id":"m043","t":"mc","q":"サン＝ドマング（ハイチ）で黒人奴隷の反乱を率い、1804年の世界初の黒人共和国独立へと道を開いた指導者は誰か。","o":["バスティーユ牢獄襲撃","トゥサン・ルーヴェルチュール","『コモン・センス』（『常識』）","国民公会"],"a":1,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"トゥサン・ルーヴェルチュール","ex":"独立達成前に捕らえられフランスで獄死した。"},{"id":"m044","t":"mc","q":"ベネズエラ、コロンビア、エクアドルなどの南米北部をスペインから独立させ、「解放者」と称される人物は誰か。","o":["『コモン・センス』（『常識』）","三権分立（権力分立）","トゥサン・ルーヴェルチュール","シモン・ボリバル"],"a":3,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"シモン・ボリバル","ex":"大コロンビアを建設するも分裂に終わった。"},{"id":"m045","t":"mc","q":"アルゼンチンやチリ、ペルーなど南米南部の独立運動を指導した革命家は誰か。","o":["サン・マルティン","「代表なくして課税なし」","印紙法","バスティーユ牢獄襲撃"],"a":0,"c":"【第3章】大西洋革命と共和政・立憲主義","w":"サン・マルティン","ex":"ボリバルと会談し、指導権を譲って引退した。"},{"id":"m046","t":"mc","q":"18世紀以降、オスマン帝国の弱体化に伴い、黒海・地中海への進出を目指すロシアと他列強との間で生じた国際問題を何と呼ぶか。","o":["東方問題","アドリアノーブル条約","ミドハト憲法","ギリシア独立戦争"],"a":0,"c":"【第4章】オスマン帝国の改革と東方問題","w":"東方問題","ex":"列強の利害が絡み、第一次大戦の遠因となる。"},{"id":"m047","t":"mc","q":"1821年に始まり、欧州の自由主義者・ロマン主義者（バイロンら）の支援を受けて1830年に完全独立を果たした運動は何か。","o":["アドリアノーブル条約","ギリシア独立戦争","青年トルコ党（統一と進歩委員会）","東方問題"],"a":1,"c":"【第4章】オスマン帝国の改革と東方問題","w":"ギリシア独立戦争","ex":"英仏露が支援。ロンドン会議で独立が承認された。"},{"id":"m048","t":"mc","q":"ギリシア独立戦争の講和条約（1829年）で、ロシアのボスフォラス・ダーダネルス両海峡の通航権などを認めた条約は何か。","o":["タンジマート","東方問題","クリミア戦争","アドリアノーブル条約"],"a":3,"c":"【第4章】オスマン帝国の改革と東方問題","w":"アドリアノーブル条約","ex":"正しくはアドリアノープル条約。露の南下が前進。"},{"id":"m049","t":"mc","q":"オスマン帝国で1839年から1876年にかけて推進された、西欧化を目指す強範な組織・制度改革（恩恵改革）を何と呼ぶか。","o":["東方問題","ルーマニア、セルビア、モンテネグロ","ミドハト憲法","タンジマート"],"a":3,"c":"【第4章】オスマン帝国の改革と東方問題","w":"タンジマート","ex":"財政難と列強の介入で成果は限定的に終わった。"},{"id":"m050","t":"mc","q":"タンジマートの開始を宣言し、宗教を問わない全臣民の生命・財産・名誉の保全を約束した詔書は何か。","o":["ギュルハネ勅令","ギリシア独立戦争","東方問題","クリミア戦争"],"a":0,"c":"【第4章】オスマン帝国の改革と東方問題","w":"ギュルハネ勅令","ex":"アブデュルメジト1世が発布した改革の宣言。"},{"id":"m051","t":"mc","q":"1853〜1856年、聖地管理権やギリシア正教徒保護権をめぐり、ロシアとオスマン帝国（英仏が支援）の間で戦われた戦争は何か。","o":["アドリアノーブル条約","タンジマート","クリミア戦争","東方問題"],"a":2,"c":"【第4章】オスマン帝国の改革と東方問題","w":"クリミア戦争","ex":"ナイティンゲールが活躍。ロシアは敗北した。"},{"id":"m052","t":"mc","q":"1876年、オスマン帝国で制定された、アジア初の近代立憲的憲法は何か。","o":["ルーマニア、セルビア、モンテネグロ","ギュルハネ勅令","ミドハト憲法","東方問題"],"a":2,"c":"【第4章】オスマン帝国の改革と東方問題","w":"ミドハト憲法","ex":"アジア初の憲法。露土戦争を口実に翌年停止。"},{"id":"m053","t":"mc","q":"1878年のベルリン会議を主導し、「誠実な仲介人」として露土戦争後の利害調整を行ったドイツの宰相は誰か。","o":["アドリアノーブル条約","ルーマニア、セルビア、モンテネグロ","ミドハト憲法","ビスマルク"],"a":3,"c":"【第4章】オスマン帝国の改革と東方問題","w":"ビスマルク","ex":"独の利益は求めず「誠実な仲介人」を自称した。"},{"id":"m054","t":"mc","q":"1878年のベルリン条約で、オスマン帝国から正式に独立が承認されたバルカン半島の3か国はどこか。","o":["ギリシア独立戦争","ギュルハネ勅令","青年トルコ党（統一と進歩委員会）","ルーマニア、セルビア、モンテネグロ"],"a":3,"c":"【第4章】オスマン帝国の改革と東方問題","w":"ルーマニア、セルビア、モンテネグロ","ex":"ブルガリアは自治国にとどまった点に注意。"},{"id":"m055","t":"mc","q":"1908年に運動を起こし、ミドハト憲法の復活と立憲制の導入を実現させた青年将校・知識人の改革派組織は何か。","o":["クリミア戦争","ギリシア独立戦争","タンジマート","青年トルコ党（統一と進歩委員会）"],"a":3,"c":"【第4章】オスマン帝国の改革と東方問題","w":"青年トルコ党（統一と進歩委員会）","ex":"革命後は独裁化し第一次大戦に参戦した。"},{"id":"m056","t":"mc","q":"清がイギリスとの貿易制限のために広州に限定して設置した、貿易独占権を持つ公認商人組合を何と呼ぶか。","o":["公行（コーホン）","香港島","義和団","太平天国"],"a":0,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"公行（コーホン）","ex":"1842年の南京条約によって廃止された。"},{"id":"m057","t":"mc","q":"イギリスが清との貿易赤字を解消するために、インド産アヘンを介在させた不当な三角貿易構造を何と呼ぶか。","o":["台湾、遼東半島（※遼東半島は三国干渉で返還）","アヘン三角貿易","洋務運動","西太后"],"a":1,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"アヘン三角貿易","ex":"銀が清から流出しアヘン戦争の原因となった。"},{"id":"m058","t":"mc","q":"1842年の南京条約で、清がイギリスに割譲し、その後長らくイギリスの植民地となった地域はどこか。","o":["香港島","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","西太后","公行（コーホン）"],"a":0,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"香港島","ex":"1997年に中国へ返還された。九竜半島は北京条約。"},{"id":"m059","t":"mc","q":"南京条約の追加条約（虎門寨追加条約など）で、清が欧米列強に認めた不平等条約の規定は何か（主要な2つ）。","o":["洋務運動","三民主義","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","変法自強運動（戊戌の変法）"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","ex":"不平等条約の二本柱。片務的最恵国待遇も認めた。"},{"id":"m060","t":"mc","q":"洪秀全が結成した拝上帝会を母体として起こり、「滅満興漢」や「天朝田畝制度」を掲げて建てられた政権は何か。","o":["香港島","袁世凱","太平天国","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"太平天国","ex":"男女平等・土地均分を掲げ、常勝軍らに敗れた。"},{"id":"m061","t":"mc","q":"太平天国やアロー戦争の鎮圧にあたって、曽国藩や李鴻章ら漢人官僚が組織した義勇軍組織（郷勇）を何と呼ぶか。","o":["アヘン三角貿易","武昌","湘軍、淮軍","袁世凱"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"湘軍、淮軍","ex":"漢人官僚の台頭と地方軍閥化の出発点となる。"},{"id":"m062","t":"mc","q":"1860年代以降、曽国藩・李鴻章らが主導し、「中体西用」のスローガンのもと西洋技術の導入を進めた富国強兵運動は何か。","o":["湘軍、淮軍","義和団","アヘン三角貿易","洋務運動"],"a":3,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"洋務運動","ex":"技術のみ導入。日清戦争の敗北で限界が露呈。"},{"id":"m063","t":"mc","q":"1894〜1895年の日清戦争の講和条約（下関条約）で、清が日本に割譲した地域はどこか（2つ）。","o":["香港島","袁世凱","台湾、遼東半島（※遼東半島は三国干渉で返還）","アヘン三角貿易"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"台湾、遼東半島（※遼東半島は三国干渉で返還）","ex":"賠償金2億両。遼東半島は三国干渉で返還した。"},{"id":"m064","t":"mc","q":"日清戦争後、清の危機感から康有為・梁啓超らが光緒帝を擁して行おうとした、日本の明治維新にならった立憲君主制への改革は何か。","o":["湘軍、淮軍","変法自強運動（戊戌の変法）","洋務運動","袁世凱"],"a":1,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"変法自強運動（戊戌の変法）","ex":"わずか約100日で挫折（百日維新）に終わった。"},{"id":"m065","t":"mc","q":"変法運動を弾圧し、光緒帝を幽閉して実権を再び握った保守派の中心人物（皇太后）は誰か。","o":["公行（コーホン）","義和団","武昌","西太后"],"a":3,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"西太后","ex":"のち義和団を支持して列強に宣戦布告した。"},{"id":"m066","t":"mc","q":"「扶清滅洋」を掲げて外征軍やキリスト教徒を襲撃し、北清事変を引き起こした宗教的秘密結社運動は何か。","o":["西太后","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","義和団","武昌"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"義和団","ex":"「扶清滅洋」を掲げ、8か国連合軍に鎮圧された。"},{"id":"m067","t":"mc","q":"義和団事件後、列強と清の間で結ばれ、北京への外国軍隊駐留権などを認めた協約は何か。","o":["辛丑和約（北京議定書）","公行（コーホン）","太平天国","香港島"],"a":0,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"辛丑和約（北京議定書）","ex":"巨額賠償金と駐兵権。清の半植民地化が決定的に。"},{"id":"m068","t":"mc","q":"1905年、孫文が東京で中国同盟会を結成した際に掲げた政治理念（民族・民権・民生）を何と呼ぶか。","o":["三民主義","義和団","変法自強運動（戊戌の変法）","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）"],"a":0,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"三民主義","ex":"民族・民権・民生。中華民国の基本理念となる。"},{"id":"m069","t":"mc","q":"1911年10月10日、四川保路運動（幹線鉄道国有化反対運動）に乗じて新軍が挙兵し、辛亥革命の発端となった地はどこか。","o":["変法自強運動（戊戌の変法）","袁世凱","武昌","太平天国"],"a":2,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"武昌","ex":"挙兵後、各省が次々と独立を宣言していった。"},{"id":"m070","t":"mc","q":"1912年に中華民国臨時大総統に就任したが、清朝皇帝（宣統帝）を退位させる見返りに孫文から実権を譲られた軍閥の首領は誰か。","o":["西太后","太平天国","領事裁判権（治外法権）、協定関税制（関税自主権の欠如）","袁世凱"],"a":3,"c":"【第5章】近代東アジアの変革運動と秩序の解体","w":"袁世凱","ex":"のち帝政復活を図り失敗し、軍閥割拠を招いた。"},{"id":"m071","t":"mc","q":"19世紀後半、欧米列強が金融資本主義を背景に、アジア・アフリカを暴力的に植民地化した時代趨勢を何と呼ぶか。","o":["ファショダ事件","帝国主義","カトリック、東方正教（およびユダヤ教）","イギリス"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"帝国主義","ex":"資本輸出と市場・原料の獲得が主な動機。"},{"id":"m072","t":"mc","q":"1884〜1885年にビスマルクが主催し、アフリカ分割のルール（実効支配の原則）を定めた会議は何か。","o":["中国人移民排斥法","カトリック、東方正教（およびユダヤ教）","ベルリン会議（アフリカ会議）","帝国主義"],"a":2,"c":"【第6章】帝国主義と国際労働移動・移民","w":"ベルリン会議（アフリカ会議）","ex":"先占（実効支配）の原則を確認した会議。"},{"id":"m073","t":"mc","q":"イギリスが推進したアフリカ縦断政策（カイロ〜ケープタウン）とフランスのアフリカ横断政策が衝突した、1898年の事件は何か。","o":["ゴールドラッシュ","ファショダ事件","ベルリン会議（アフリカ会議）","契約移民（苦力貿易）"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"ファショダ事件","ex":"仏が譲歩。のちの英仏協商への道を開いた。"},{"id":"m074","t":"mc","q":"1899〜1902年、イギリスが鉱物資源（金・ダイヤモンド）を求めて南アフリカのブール人国家を併合した戦争は何か。","o":["カンガーニー制度","南アフリカ戦争（ブール戦争）","インデンチャー・レイバー（年期契約労働者制度）","白豪主義"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"南アフリカ戦争（ブール戦争）","ex":"英は勝利するも国際的な批判を浴びた。"},{"id":"m075","t":"mc","q":"スエズ運河を株式買収によって実質的に支配し、1882年にエジプトを保護国化した国はどこか。","o":["帝国主義","イギリス","ジャガイモ飢饉","ゴールドラッシュ"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"イギリス","ex":"ディズレーリ首相が運河会社の株式を買収した。"},{"id":"m076","t":"mc","q":"黒人奴隷制度廃止後、アジア（特に中国・インド）から鉱山や農園の労働力として大量に渡航した契約労働者を何と呼ぶか。","o":["ベルリン会議（アフリカ会議）","苦力（クーリー）","ゴールドラッシュ","カトリック、東方正教（およびユダヤ教）"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"苦力（クーリー）","ex":"奴隷制に近い過酷な条件で働かされた。"},{"id":"m077","t":"mc","q":"アヘン戦争後の天津条約などで公認され、大量の中国人労働者が東南アジア・南北アメリカに渡る契機となった労働形態は何か。","o":["ベルリン会議（アフリカ会議）","契約移民（苦力貿易）","ジャガイモ飢饉","ゴールドラッシュ"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"契約移民（苦力貿易）","ex":"東南アジアの華僑社会が形成される背景となる。"},{"id":"m078","t":"mc","q":"19世紀半ば、カリフォルニアで金鉱が発見されたことで世界中から人が殺到した現象を何と呼ぶか。","o":["カンガーニー制度","華僑（華人）","インデンチャー・レイバー（年期契約労働者制度）","ゴールドラッシュ"],"a":3,"c":"【第6章】帝国主義と国際労働移動・移民","w":"ゴールドラッシュ","ex":"1848年に金鉱発見。中国人労働者も多数流入。"},{"id":"m079","t":"mc","q":"1882年、中国人労働者の流入に危機感を募らせたアメリカ連邦議会が制定した、特定の民族排除を目的とした法規は何か。","o":["ジャガイモ飢饉","ファショダ事件","契約移民（苦力貿易）","中国人移民排斥法"],"a":3,"c":"【第6章】帝国主義と国際労働移動・移民","w":"中国人移民排斥法","ex":"米国初の、民族を名指しした移民制限法。"},{"id":"m080","t":"mc","q":"19世紀後半、オーストラリアで白人優位の社会を保つために非白人（特にアジア系）の移民を極端に制限した政策は何か。","o":["苦力（クーリー）","ジャガイモ飢饉","白豪主義","ファショダ事件"],"a":2,"c":"【第6章】帝国主義と国際労働移動・移民","w":"白豪主義","ex":"1970年代に撤廃され多文化主義へ転換した。"},{"id":"m081","t":"mc","q":"イギリスがインドからサトウキビ農園の労働力として、南アフリカやカリブ海地域へ送り込んだ年雇い労働制度を何と呼ぶか。","o":["ファショダ事件","中国人移民排斥法","インデンチャー・レイバー（年期契約労働者制度）","華僑（華人）"],"a":2,"c":"【第6章】帝国主義と国際労働移動・移民","w":"インデンチャー・レイバー（年期契約労働者制度）","ex":"印僑（インド系移民）社会形成の起源となる。"},{"id":"m082","t":"mc","q":"東南アジアのゴム農園や錫鉱山で、イギリスが南インドからタミル人労働者を調達・管理したあっせん制度を何と呼ぶか。","o":["カンガーニー制度","インデンチャー・レイバー（年期契約労働者制度）","ファショダ事件","ジャガイモ飢饉"],"a":0,"c":"【第6章】帝国主義と国際労働移動・移民","w":"カンガーニー制度","ex":"マレー半島のタミル人社会の起源となった制度。"},{"id":"m083","t":"mc","q":"東南アジアへ移住し、現地社会に定着して商業や金融業などで経済的実権を握った中国系住民を何と呼ぶか。","o":["契約移民（苦力貿易）","華僑（華人）","苦力（クーリー）","ゴールドラッシュ"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"華僑（華人）","ex":"経済力を持ち、現地の華人排斥を招くこともあった。"},{"id":"m084","t":"mc","q":"1840年代後半にアイルランドを襲い、約100万人の餓死者と100万人以上の合衆国移民を生み出した災害は何か。","o":["南アフリカ戦争（ブール戦争）","ジャガイモ飢饉","苦力（クーリー）","ゴールドラッシュ"],"a":1,"c":"【第6章】帝国主義と国際労働移動・移民","w":"ジャガイモ飢饉","ex":"単一作物への依存がもたらした危機の代表例。"},{"id":"m085","t":"mc","q":"19世紀末から20世紀初頭にかけて、アメリカ合衆国へ渡った南欧・東欧系の新移民の主な宗教的背景は何か（2つ）。","o":["カトリック、東方正教（およびユダヤ教）","南アフリカ戦争（ブール戦争）","白豪主義","苦力（クーリー）"],"a":0,"c":"【第6章】帝国主義と国際労働移動・移民","w":"カトリック、東方正教（およびユダヤ教）","ex":"プロテスタント中心の旧移民との対立を生んだ。"},{"id":"m086","t":"mc","q":"第1次世界大戦の講和条約（ベルサイユ条約）に基づき、1920年に設立された史上初の国際平和機構は何か。","o":["世界恐慌","不戦条約（ケロッグ＝ブリアン協定）","国際連盟","NATO（北大西洋条約機構）"],"a":2,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"国際連盟","ex":"本部はジュネーヴ。米は上院の反対で不参加。"},{"id":"m087","t":"mc","q":"国際連盟の決定的な欠陥として指摘される、大国の不参加（アメリカなど）以外の採決上の原則は何か。","o":["トルーマン＝ドクトリン","全会一致の原則","マルタ会談","国際連盟"],"a":1,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"全会一致の原則","ex":"制裁も経済制裁のみで、実効性を欠いた。"},{"id":"m088","t":"mc","q":"1928年に米仏の外相が主導して締結され、国際紛争の解決手段としての戦争を放棄することを約した条約は何か。","o":["不戦条約（ケロッグ＝ブリアン協定）","バンドン会議（第1回アジア・アフリカ会議）","ブレトンウッズ体制","国際連盟"],"a":0,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"不戦条約（ケロッグ＝ブリアン協定）","ex":"自衛戦争は除外され、実効性は乏しかった。"},{"id":"m089","t":"mc","q":"1929年10月、ニューヨークのウォール街での株価暴落に始まり、世界中に波及した経済危機を何と呼ぶか。","o":["世界恐慌","NATO（北大西洋条約機構）","バンドン会議（第1回アジア・アフリカ会議）","コメコン（経済相互援助会議）"],"a":0,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"世界恐慌","ex":"米はニューディール政策で克服を図った。"},{"id":"m090","t":"mc","q":"世界恐慌に対し、イギリスやフランスなどの列強が自国の経済圏を保護し、他国に高い関税を課した閉鎖的な経済体制は何か。","o":["不戦条約（ケロッグ＝ブリアン協定）","ブロック経済","ブレトンウッズ体制","マルタ会談"],"a":1,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"ブロック経済","ex":"「持たざる国」の反発が第二次大戦の一因に。"},{"id":"m091","t":"mc","q":"1944年、戦後の国際金融・通貨体制を確立するために開かれた会議で協定された体制を何と呼ぶか。","o":["トルーマン＝ドクトリン","ブレトンウッズ体制","バンドン会議（第1回アジア・アフリカ会議）","ニクソン＝ショック"],"a":1,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"ブレトンウッズ体制","ex":"金ドル本位制。IMFとIBRDを創設した。"},{"id":"m092","t":"mc","q":"ブレトンウッズ協定に基づいて設立された、固定相場制の維持や加盟国の国際収支不均衡への融資を行う国際機関は何か。","o":["マーシャル＝プラン","コメコン（経済相互援助会議）","国際通貨基金（IMF）","NATO（北大西洋条約機構）"],"a":2,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"国際通貨基金（IMF）","ex":"世界銀行（IBRD）とセットで覚えたい。"},{"id":"m093","t":"mc","q":"1947年、アメリカ大統領が発表し、「共産主義の封じ込め」を宣言して冷戦を決定づけた外交方針は何か。","o":["トルーマン＝ドクトリン","全会一致の原則","世界恐慌","ニクソン＝ショック"],"a":0,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"トルーマン＝ドクトリン","ex":"ギリシア・トルコへの支援表明が発端。"},{"id":"m094","t":"mc","q":"1947年、合衆国国務長官が提唱した、西ヨーロッパの復興と経済安定を目的とした巨額の援助計画は何か。","o":["マーシャル＝プラン","バンドン会議（第1回アジア・アフリカ会議）","ブレトンウッズ体制","NATO（北大西洋条約機構）"],"a":0,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"マーシャル＝プラン","ex":"欧州復興援助計画。ソ連・東欧は受入れを拒否。"},{"id":"m095","t":"mc","q":"マーシャル＝プランに対抗して、ソ連と東欧諸国が1949年に結成した経済協力機構は何か。","o":["コメコン（経済相互援助会議）","バンドン会議（第1回アジア・アフリカ会議）","NATO（北大西洋条約機構）","マルタ会談"],"a":0,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"コメコン（経済相互援助会議）","ex":"東側の経済統合機構。1991年に解散した。"},{"id":"m096","t":"mc","q":"1949年、ソ連のベルリン封鎖などに対抗して結成された、欧米諸国の集団安全保障機構（軍事同盟）は何か。","o":["マルタ会談","NATO（北大西洋条約機構）","ニクソン＝ショック","世界恐慌"],"a":1,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"NATO（北大西洋条約機構）","ex":"現在も存続し、冷戦後は東方へ拡大している。"},{"id":"m097","t":"mc","q":"NATOに対抗して、1955年にソ連と東欧社会主義諸国が結成した軍事同盟体制は何か。","o":["マルタ会談","ブロック経済","ニクソン＝ショック","ワルシャワ条約機構"],"a":3,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"ワルシャワ条約機構","ex":"西ドイツのNATO加盟が結成の直接の契機。"},{"id":"m098","t":"mc","q":"1955年、インドのネルーやインドネシアのカルノらが主導し、アジア・アフリカの非同盟諸国が集まった会議は何か。","o":["国際連盟","バンドン会議（第1回アジア・アフリカ会議）","マーシャル＝プラン","ブロック経済"],"a":1,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"バンドン会議（第1回アジア・アフリカ会議）","ex":"平和十原則を採択。正しくはスカルノ大統領。"},{"id":"m099","t":"mc","q":"1971年、ドルの金引き換え停止を発表し、ブレトンウッズ体制（固定相場制）を崩壊させたアメリカ大統領の発表（ドル＝ショック）は何か。","o":["国際通貨基金（IMF）","ブロック経済","ニクソン＝ショック","トルーマン＝ドクトリン"],"a":2,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"ニクソン＝ショック","ex":"固定相場制が崩れ変動相場制へ移行する契機。"},{"id":"m100","t":"mc","q":"1989年、米ソの首脳（ブッシュとゴルバチョフ）が会談し、冷戦の終結を世界に宣言した出来事は何か。","o":["不戦条約（ケロッグ＝ブリアン協定）","ブロック経済","マルタ会談","国際通貨基金（IMF）"],"a":2,"c":"【第7章】20世紀の国際体制・冷戦・経済秩序","w":"マルタ会談","ex":"「ヤルタからマルタへ」と表現される転換点。"}];
+</script>
+<script>
+window.onerror=function(msg,src,line){
+  try{var e=document.getElementById('errbar');e.style.display='block';
+  e.textContent='エラー: '+msg+' (行'+line+')';}catch(x){}
+};
+/* ============ FSRS-5 ============ */
+const W=[0.40255,1.18385,3.173,15.69105,7.1949,0.5345,1.4604,0.0046,1.54575,0.1192,1.01925,1.9395,0.11,0.29605,2.2698,0.2315,2.9898,0.51655,0.6621];
+const DECAY=-0.5, FACTOR=Math.pow(0.9,1/DECAY)-1;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const D0=g=>clamp(W[4]-Math.exp(W[5]*(g-1))+1,1,10);
+const S0=g=>Math.max(W[g-1],0.1);
+const retr=(t,S)=>Math.pow(1+FACTOR*t/S,DECAY);
+const nextInterval=(S,rr)=>Math.max(1,Math.round(S/FACTOR*(Math.pow(rr,1/DECAY)-1)));
+function nextD(D,g){const dd=-W[6]*(g-3);let Dp=D+dd*(10-D)/9;return clamp(W[7]*D0(4)+(1-W[7])*Dp,1,10)}
+function recallS(D,S,R,g){const hard=g===2?W[15]:1,easy=g===4?W[16]:1;
+  return clamp(S*(1+Math.exp(W[8])*(11-D)*Math.pow(S,-W[9])*(Math.exp(W[10]*(1-R))-1)*hard*easy),0.1,36500)}
+function forgetS(D,S,R){return clamp(Math.min(W[11]*Math.pow(D,-W[12])*(Math.pow(S+1,W[13])-1)*Math.exp(W[14]*(1-R)),S),0.1,36500)}
+const LEARN_STEPS=[1,10], RELEARN_STEPS=[10];
+const DAY=86400000, MIN=60000;
+
+/* ============ 状態 ============ */
+let S={};
+let CFG={retention:0.9,newPerDay:20,sessionMax:0,order:'seq',bias:'review'};
+let LOG={date:'',newDone:0,revDone:0,streakDays:0,lastStudy:'',correct:0,total:0};
+let UC=[];   // 追加した問題
+let OV={};   // 収録問題への修正
+let DL=[];   // 削除した収録問題のid
+let storageOK=true,storageKind='none',dirty=false,saveTimer=null;
+const KEY='wh-mc-v1';
+const today=()=>new Date().toISOString().slice(0,10);
+const isUserQ=id=>typeof id==='string'&&id[0]==='u';
+
+async function storageGet(k){
+  if(window.storage)return await window.storage.get(k);
+  try{const v=localStorage.getItem(k);return v!=null?{key:k,value:v}:null}catch(e){throw e}
+}
+async function storageSet(k,v){
+  if(window.storage){const r=await window.storage.set(k,v);if(!r)throw new Error('null応答');return r}
+  try{localStorage.setItem(k,v);return{key:k,value:v}}catch(e){throw e}
+}
+function detectStorage(){
+  if(window.storage){storageKind='claude';return true}
+  try{localStorage.setItem('__t__','1');localStorage.removeItem('__t__');storageKind='local';return true}
+  catch(e){storageKind='none';return false}
+}
+function applyPayload(v){
+  const o=JSON.parse(v);
+  S=o.s||{};CFG=Object.assign(CFG,o.cfg||{});LOG=Object.assign(LOG,o.log||{});
+  UC=o.uc||[];OV=o.ov||{};DL=o.dl||[];
+  for(const q of UC)QS.push(q);
+  for(const id in OV){const q=QS.find(x=>String(x.id)===String(id));if(q)Object.assign(q,OV[id]);}
+  if(DL.length){const del=new Set(DL.map(String));
+    for(let i=QS.length-1;i>=0;i--){if(del.has(String(QS[i].id)))QS.splice(i,1)}}
+}
+async function loadState(){
+  storageOK=detectStorage();
+  if(!storageOK)return;
+  let done=false;
+  try{
+    const r=await storageGet(KEY);
+    if(r&&r.value){applyPayload(r.value);done=true}
+  }catch(e){}
+  if(!done&&storageKind==='claude'){
+    try{const bk=localStorage.getItem(KEY+'-bk');if(bk){applyPayload(bk);dirty=true;}}catch(e){}
+  }
+}
+function scheduleSave(){dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(saveState,600)}
+async function saveState(){
+  if(!storageOK||!dirty)return false;
+  clearTimeout(saveTimer);
+  const payload=JSON.stringify({s:S,cfg:CFG,log:LOG,uc:UC,ov:OV,dl:DL});
+  for(let i=0;i<4;i++){
+    try{await storageSet(KEY,payload);dirty=false;
+      try{localStorage.setItem(KEY+'-bk',payload)}catch(e){}
+      return true}
+    catch(e){await new Promise(r=>setTimeout(r,400*(i+1)))}
+  }
+  toast('保存に失敗しました。後で自動再試行します');
+  return false;
+}
+setInterval(()=>{if(dirty)saveState()},10000);
+
+/* ============ 採点 ============ */
+function getSt(id){return S[id]||(S[id]={st:0,step:0,D:0,S:0,due:0,last:0,reps:0,lapses:0,ok:0,ng:0})}
+function previewIvl(c,g){
+  if(c.st===0||c.st===1||c.st===3){
+    const steps=c.st===3?RELEARN_STEPS:LEARN_STEPS;
+    const i=c.st===0?0:c.step;
+    if(g===1)return fmtIvl(steps[0]*MIN);
+    if(g===2)return fmtIvl((steps[Math.min(i,steps.length-1)])*MIN);
+    if(g===3){ if(i+1<steps.length)return fmtIvl(steps[i+1]*MIN);
+      const s=c.st===0?S0(3):(c.S||S0(3));return fmtIvl(nextInterval(s,CFG.retention)*DAY)}
+    const s=c.st===0?S0(4):(c.S||S0(4));return fmtIvl(nextInterval(s,CFG.retention)*DAY);
+  }
+  const t=Math.max(0,(Date.now()-c.last)/DAY), R=retr(t,c.S);
+  const ns=g===1?forgetS(c.D,c.S,R):recallS(c.D,c.S,R,g);
+  if(g===1)return fmtIvl(RELEARN_STEPS[0]*MIN);
+  return fmtIvl(nextInterval(ns,CFG.retention)*DAY);
+}
+function grade(id,g,correct){
+  const c=getSt(id), now=Date.now(), isNew=c.st===0;
+  if(correct===true)c.ok=(c.ok|0)+1; else if(correct===false)c.ng=(c.ng|0)+1;
+  if(c.st===0){
+    c.D=D0(g);c.S=S0(g);
+    if(g<=2){c.st=1;c.step=0;c.due=now+LEARN_STEPS[0]*MIN}
+    else if(g===3){ if(LEARN_STEPS.length>1){c.st=1;c.step=1;c.due=now+LEARN_STEPS[1]*MIN} else {c.st=2;c.due=now+nextInterval(c.S,CFG.retention)*DAY} }
+    else{c.st=2;c.due=now+nextInterval(c.S,CFG.retention)*DAY}
+  }else if(c.st===1||c.st===3){
+    const steps=c.st===3?RELEARN_STEPS:LEARN_STEPS;
+    if(g===1){c.step=0;c.due=now+steps[0]*MIN}
+    else if(g===2){c.due=now+steps[Math.min(c.step,steps.length-1)]*MIN}
+    else if(g===3){ if(c.step+1<steps.length){c.step++;c.due=now+steps[c.step]*MIN} else {c.st=2;c.due=now+nextInterval(c.S,CFG.retention)*DAY} }
+    else{c.st=2;c.due=now+nextInterval(c.S,CFG.retention)*DAY}
+  }else{
+    const t=Math.max(0,(now-c.last)/DAY), R=retr(t,c.S);
+    const D=nextD(c.D,g);
+    if(g===1){c.S=forgetS(c.D,c.S,R);c.D=D;c.lapses++;c.st=3;c.step=0;c.due=now+RELEARN_STEPS[0]*MIN}
+    else{c.S=recallS(c.D,c.S,R,g);c.D=D;c.due=now+nextInterval(c.S,CFG.retention)*DAY}
+  }
+  c.last=now;c.reps++;
+  if(LOG.date!==today()){LOG.date=today();LOG.newDone=0;LOG.revDone=0}
+  if(isNew)LOG.newDone++;else LOG.revDone++;
+  if(correct===true){LOG.correct=(LOG.correct|0)+1}
+  if(correct!==null&&correct!==undefined){LOG.total=(LOG.total|0)+1}
+  if(LOG.lastStudy!==today()){
+    const y=new Date(Date.now()-DAY).toISOString().slice(0,10);
+    LOG.streakDays=(LOG.lastStudy===y)?(LOG.streakDays||0)+1:1;
+    LOG.lastStudy=today();
+  }
+  scheduleSave();
+}
+function fmtIvl(ms){
+  const m=ms/MIN;
+  if(m<60)return '<'+Math.max(1,Math.round(m))+'分';
+  if(ms<DAY)return Math.round(ms/3600000)+'時間';
+  const d=ms/DAY;
+  if(d<30)return Math.round(d)+'日';
+  if(d<365)return (d/30.4).toFixed(1).replace(/\.0$/,'')+'ヶ月';
+  return (d/365).toFixed(1).replace(/\.0$/,'')+'年';
+}
+
+/* ============ キュー ============ */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildQueue(){
+  const now=Date.now();
+  if(LOG.date!==today()){LOG.date=today();LOG.newDone=0;LOG.revDone=0}
+  const due=[],learn=[],fresh=[];
+  for(const q of QS){
+    const st=S[q.id];
+    if(!st||st.st===0){fresh.push(q);continue}
+    if(st.due<=now){(st.st===2?due:learn).push(q)}
+  }
+  due.sort((a,b)=>S[a.id].due-S[b.id].due);
+  learn.sort((a,b)=>S[a.id].due-S[b.id].due);
+  const lim=Math.max(0,CFG.newPerDay-LOG.newDone);
+  let nw=CFG.order==='rand'?shuffle(fresh.slice()):fresh;
+  nw=nw.slice(0,lim);
+  let q = CFG.bias==='new' ? [...nw,...learn,...due]
+        : CFG.bias==='mix' ? [...learn,...shuffle([...due,...nw])]
+        : [...learn,...due,...nw];
+  const cap=CFG.sessionMax|0;
+  if(cap>0&&q.length>cap)q=q.slice(0,cap);
+  return {queue:q,dueN:due.length+learn.length,newN:nw.length,freshTotal:fresh.length};
+}
+function futureDue(){const now=Date.now();let n=0;for(const id in S){const c=S[id];if(c.st>0&&c.due>now&&c.due<=now+DAY)n++}return n}
+
+/* ============ UI ============ */
+const $=s=>document.querySelector(s);
+const main=$('#main');
+let view='home',queue=[],qi=0,revealed=false,sessionDone=0,sessionTotal=0,answered=null;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
+function setNav(v){view=v;['home','list','add','stat','set'].forEach(k=>$('#nav-'+k).classList.toggle('on',k===v))}
+function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function updTotal(){const e=$('#totalN');if(e)e.textContent=QS.length}
+
+/* ---- home ---- */
+function renderHome(){
+  setNav('home');
+  const {dueN,newN,freshTotal,queue:q0}=buildQueue();
+  const learned=Object.values(S).filter(c=>c.st===2).length;
+  const learning=Object.values(S).filter(c=>c.st===1||c.st===3).length;
+  const d=new Date(), wd=['日','月','火','水','木','金','土'][d.getDay()];
+  main.innerHTML=`
+  <div class="notice" id="notice">⚠️ この環境では進捗を保存できません。学習記録はこの画面を閉じるまでのみ保持されます。</div>
+  <div class="hero">
+    <div class="date">${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${wd}）　連続 ${LOG.streakDays||0} 日</div>
+    <div class="counts">
+      <div class="count due"><b>${dueN}</b><span>復習</span></div>
+      <div class="count"><b>${newN}</b><span>新規</span></div>
+      <div class="count done"><b>${(LOG.newDone|0)+(LOG.revDone|0)}</b><span>今日</span></div>
+    </div>
+    <button class="start" id="startBtn" ${dueN+newN===0?'disabled':''}>${dueN+newN===0?'今日の学習は完了':'学習を始める（'+q0.length+'問）'}</button>
+  </div>
+  <div class="substat"><span>習得済み <b>${learned}</b></span><span>学習中 <b>${learning}</b></span><span>未着手 <b>${freshTotal}</b></span></div>
+  <div class="substat"><span>24時間以内の復習 <b>${futureDue()}</b></span><span>目標記憶率 <b>${Math.round(CFG.retention*100)}%</b></span></div>
+  <div class="substat"><span>収録問題 <b>${QS.length}</b> 問（うち追加分 ${UC.length} 問）</span></div>`;
+  if(!storageOK)$('#notice').style.display='block';
+  const b=$('#startBtn'); if(b&&!b.disabled)b.onclick=startSession;
+}
+
+/* ---- session ---- */
+function startSession(){
+  const q=buildQueue();
+  queue=q.queue;qi=0;sessionDone=0;sessionTotal=queue.length;
+  if(!sessionTotal){toast('出題できる問題がありません');return}
+  renderCard();
+}
+function renderCard(){
+  setNav('home');
+  if(qi>=queue.length){renderFinish();return}
+  let guard=queue.length-qi;
+  while(guard-->0){
+    const st=S[queue[qi].id];
+    const notReady=st&&(st.st===1||st.st===3)&&st.due>Date.now()+2000;
+    if(notReady&&qi<queue.length-1)queue.push(queue.splice(qi,1)[0]); else break;
+  }
+  const q=queue[qi], st=getSt(q.id), isNew=st.st===0;
+  revealed=false;answered=null;
+  main.innerHTML=`
+  <div class="progress"><i style="width:${sessionTotal?Math.round(sessionDone/sessionTotal*100):0}%"></i></div>
+  <div class="qtags"><span class="${isNew?'tag-new':''}">${isNew?'新規':st.st===2?'復習':'学習中'}${isUserQ(q.id)?'・追加分':''}</span><span>残り ${queue.length-qi} 問</span></div>
+  <div class="card">
+    <div class="body">
+      ${q.c?`<span class="kind">${esc(q.c)}</span>`:''}
+      <div class="stem">${esc(q.q)}</div>
+      <div class="opts" id="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="num">${i+1}</span><span>${esc(o)}</span></button>`).join('')}</div>
+      <div class="ansbox" id="ansbox"></div>
+    </div>
+    <button class="reveal" id="revealBtn">わからない（答えを見る）</button>
+    <div class="grades" id="grades">
+      <button class="g1" data-g="1"><b>もう一度</b><small>${previewIvl(st,1)}</small></button>
+      <button class="g2" data-g="2"><b>難しい</b><small>${previewIvl(st,2)}</small></button>
+      <button class="g3" data-g="3"><b>普通</b><small>${previewIvl(st,3)}</small></button>
+      <button class="g4" data-g="4"><b>簡単</b><small>${previewIvl(st,4)}</small></button>
+    </div>
+  </div>`;
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(revealed)return;
+    reveal(q,+b.dataset.i===q.a,+b.dataset.i);
+  });
+  $('#revealBtn').onclick=()=>{ if(!revealed)reveal(q,null); };
+  $('#grades').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    grade(q.id,+b.dataset.g,answered);
+    sessionDone++;qi++;renderCard();
+  });
+}
+function reveal(q,correct,picked){
+  revealed=true;answered=correct;
+  $('#opts').querySelectorAll('.opt').forEach(b=>{
+    const i=+b.dataset.i;b.disabled=true;
+    if(i===q.a)b.classList.add('ok');
+    else if(picked!==undefined&&i===picked)b.classList.add('ng');
+  });
+  const mark=correct===true?'　✓ 正解':correct===false?'　✕ 不正解':'';
+  $('#ansbox').innerHTML=`<div class="ansline"><span class="lab">正解</span><b>${q.a+1}. ${esc(q.o[q.a])}</b>${mark}</div>`
+    +(q.ex?`<div class="ex">${esc(q.ex)}</div>`:'')
+    +(q.c?`<div class="chaptag">${esc(q.c)}</div>`:'')
+    +`<button class="editlink" id="editHere">この問題を修正・削除</button>`;
+  $('#ansbox').classList.add('show');
+  $('#revealBtn').style.display='none';
+  $('#grades').classList.add('show');
+  $('#editHere').onclick=()=>renderEdit(q.id,'review');
+  if(correct===false)toast('不正解 —「もう一度」で短期復習に回せます');
+}
+function renderFinish(){
+  setNav('home');
+  const acc=LOG.total?Math.round(LOG.correct/LOG.total*100):0;
+  main.innerHTML=`<div class="fin"><h2>お疲れさまでした</h2>
+    <p>今回 ${sessionDone} 問を学習しました。<br>累計正答率 ${acc}%（${LOG.correct||0}/${LOG.total||0}）</p>
+    <button class="start" id="again">ホームへ戻る</button></div>`;
+  $('#again').onclick=renderHome;
+  saveState();
+}
+
+/* ---- list ---- */
+let listQuery='';
+function renderList(){
+  setNav('list');
+  const q=listQuery.toLowerCase();
+  const items=QS.filter(x=>{
+    if(!q)return true;
+    const hay=[x.w||'',x.q,x.c||'',x.ex||'',(x.o||[]).join(' ')].join(' ').toLowerCase();
+    return hay.indexOf(q)>=0;
+  });
+  main.innerHTML=`
+  <input class="search" id="sq" placeholder="問題文・解答・章・解説で検索" value="${esc(listQuery)}">
+  <div class="substat"><span>該当 <b>${items.length}</b> 問</span><span>タップで解答表示</span></div>
+  <div id="lw">${items.map(x=>{
+    const st=S[x.id];
+    const stn=!st||st.st===0?'未着手':st.st===2?'復習':'学習中';
+    return `<div class="li" data-id="${esc(String(x.id))}"><div class="top"><span class="w">${esc(x.c||'（章未設定）')}</span><span>${isUserQ(x.id)?'<span class="ulabel">追加分</span>・':''}${stn}</span></div>
+      <div>${esc(x.q)}</div>
+      <div class="det">正解：${x.a+1}. ${esc(x.o[x.a])}${x.ex?'<br>'+esc(x.ex):''}
+      <button class="eb" data-edit="${esc(String(x.id))}">編集・削除</button></div></div>`;
+  }).join('')||'<div class="substat">該当なし</div>'}</div>`;
+  const s=$('#sq');
+  s.oninput=()=>{listQuery=s.value;const p=s.selectionStart;renderList();const n=$('#sq');n.focus();n.setSelectionRange(p,p)};
+  $('#lw').querySelectorAll('.li').forEach(el=>el.onclick=e=>{
+    if(e.target.dataset.edit!==undefined){renderEdit(e.target.dataset.edit,'list');return}
+    el.classList.toggle('open');
+  });
+}
+
+/* ---- Claude用プロンプト ---- */
+function buildPrompt(input){
+  return `あなたは世界史のエキスパートであり、大学受験世界史の問題作成者です。以下の入力から、4択問題を1問作成してください。
+
+■ 入力
+${input}
+
+■ まず入力の種類を判断してください
+【A】入力が「一問一答の問題文」として成立している場合
+  → その問題文をそのまま活かし、正しい解答を1つ確定させてください。
+【B】入力が語句・人名・事件名・キーワードなど、問題文になっていない場合
+  → その語句が答えになる、または主題となる4択問題を、世界史の受験問題として自然な形で1問作成してください。問われるべき最も重要な論点（何年か・誰か・何と呼ぶか・結果は何か等）を自分で選んでください。
+【C】入力が世界史と無関係、または実在しない事項・重大な事実誤認を含む場合
+  → 問題は作らず、warn にその旨と、想定される正しい語句の候補を日本語で説明してください。
+
+■ 選択肢の作り方（最重要）
+- 選択肢は必ず4つ。うち1つが正解。
+- 誤答の3つは、ランダムな語ではなく「その問題で受験生が実際によく間違える答え」を選んでください。具体的には次のような紛らわしいものを優先します:
+  ・同じ時代・同じ地域の類似した事件、条約、制度、人物
+  ・名称が似ている、あるいは混同されやすい事項（例：ベルリン会議とベルリン条約、洋務運動と変法運動）
+  ・順序や年代を取り違えやすい前後の出来事
+  ・因果関係や主体（どの国が・誰が）を取り違えやすい事項
+- 誤答は必ず実在する世界史用語にしてください（架空の語を作らない）。
+- 正解が一目で分かってしまう極端に無関係な選択肢は入れないでください。
+
+■ 解説
+- ex には、世界史のエキスパートとして、その事項の重要なポイントや関連事項を50文字以内の日本語で簡潔に書いてください。年代・因果・混同しやすい事項との違い・その後の展開など、記憶の助けになる一言を優先します。50文字を超えないこと。
+
+■ 出力形式（JSONオブジェクトのみ。前置き・説明・コードブロック記号は書かないこと）
+{"q":"問題文","o":["選択肢1","選択肢2","選択肢3","選択肢4"],"a":正解の番号(0〜3の整数),"c":"【時代・地域】分野名 の形式の短い章ラベル","ex":"50文字以内の解説","warn":""}
+
+warn は問題がなければ空文字。年代や表記に注意点がある場合、また上記【C】の場合のみ日本語で記入してください。`;
+}
+function extractJSON(text){
+  let t=String(text).replace(/```json/gi,'').replace(/```/g,'');
+  const s=t.indexOf('{'), e=t.lastIndexOf('}');
+  if(s<0||e<s)return null;
+  const cand=t.slice(s,e+1);
+  const d=tryParse(cand); if(d)return d;
+  const f=normalizeQuotes(cand);
+  return tryParse(f)||tryParse(firstObject(f)||'')||null;
+}
+function tryParse(s){try{return JSON.parse(s)}catch(e){return null}}
+function normalizeQuotes(s){
+  const DQ=/[\u201C\u201D\u201E\u201F\u2033\u3003\uFF02]/;
+  let out='',inStr=false,es=false;
+  for(let i=0;i<s.length;i++){
+    let ch=s[i];
+    if(inStr){
+      if(es){out+=ch;es=false;continue}
+      if(ch==='\\'){out+=ch;es=true;continue}
+      if(ch==='"'||DQ.test(ch)){
+        let j=i+1;while(j<s.length&&/\s/.test(s[j]))j++;
+        const nx=s[j];
+        if(nx===undefined||nx===','||nx==='}'||nx===']'||nx===':'){out+='"';inStr=false;continue}
+        out+=(ch==='"')?'\\"':ch;continue;
+      }
+      out+=ch;continue;
+    }
+    if(ch==='"'||DQ.test(ch)){out+='"';inStr=true;continue}
+    out+=ch;
+  }
+  return out;
+}
+function firstObject(t){
+  const s=t.indexOf('{');if(s<0)return null;
+  let d=0,inStr=false,es=false;
+  for(let i=s;i<t.length;i++){
+    const ch=t[i];
+    if(inStr){if(es)es=false;else if(ch==='\\')es=true;else if(ch==='"')inStr=false}
+    else{if(ch==='"')inStr=true;else if(ch==='{')d++;else if(ch==='}'){d--;if(!d)return t.slice(s,i+1)}}
+  }
+  return null;
+}
+
+/* ---- 現在の内容とClaudeの提案の比較 ---- */
+function optsText(o,a){
+  if(!o||!o.length||o.every(x=>!x))return '';
+  return o.map((x,i)=>`${i+1}. ${x||''}${i===a?'　←正解':''}`).join('\n');
+}
+function optsHTML(o,a){
+  if(!o||!o.length||o.every(x=>!x))return '<span class="dempty">（未入力）</span>';
+  return o.map((x,i)=>`${i+1}. ${esc(x||'')}${i===a?' <span class="dmark">✓ 正解</span>':''}`).join('<br>');
+}
+function sameOpts(c,n){
+  if(!c.o||!n.o)return false;
+  if(c.a!==n.a)return false;
+  for(let i=0;i<4;i++){if((c.o[i]||'')!==(n.o[i]||''))return false}
+  return true;
+}
+/* cur/neu = {q,o,a,c,ex}。項目ごとに「現在のまま／置き換え／追記」を選び、
+   自由に手直ししたうえで onCommit(結果) に渡す。 */
+function renderDiffPanel(host,cur,neu,commitLabel,onCommit,onCancel){
+  const hasOptsNew = neu.o && neu.o.length===4 && neu.o.every(x=>x&&String(x).trim());
+  const fields=[
+    {k:'q', label:'問題文', append:false},
+    {k:'opts', label:'選択肢と正解', append:false},
+    {k:'c', label:'章・分野', append:false},
+    {k:'ex', label:'解説', append:true}
+  ];
+  let html='<div class="fpanel"><div class="hd"><b>現在の内容と比べて反映する</b><br>項目ごとに、どう扱うかを選んでください。反映される内容はそのまま手直しできます。</div>';
+  for(const f of fields){
+    let curV,newV,same,hasNew;
+    if(f.k==='opts'){
+      curV=optsHTML(cur.o,cur.a); newV=optsHTML(neu.o,neu.a);
+      hasNew=hasOptsNew; same=hasNew&&sameOpts(cur,neu);
+    }else{
+      const cv=(cur[f.k]||'').trim(), nv=(neu[f.k]||'').trim();
+      curV=cv?esc(cv):'<span class="dempty">（未入力）</span>';
+      newV=esc(nv); hasNew=!!nv; same=hasNew&&cv===nv;
+    }
+    html+='<div class="dfield">';
+    html+='<div class="dlab">'+f.label
+      +(same?'<span>（変更なし）</span>':'')
+      +(!hasNew?'<span>（Claudeの提案なし）</span>':'')+'</div>';
+    html+='<div><div class="dsub">現在</div><div class="dcur">'+curV+'</div></div>';
+    if(hasNew&&!same){
+      html+='<div><div class="dsub new">Claudeの提案</div><div class="dnew">'+newV+'</div></div>';
+      html+='<div class="dbtns">'
+        +'<button class="dbtn" data-k="'+f.k+'" data-a="keep">現在のまま</button>'
+        +'<button class="dbtn on" data-k="'+f.k+'" data-a="replace">置き換え</button>'
+        +(f.append?'<button class="dbtn" data-k="'+f.k+'" data-a="append">追記</button>':'')
+        +'</div>';
+    }
+    html+='<div class="dres"><div class="dsub">反映される内容（編集できます）</div>';
+    if(f.k==='opts'){
+      html+='<div id="dOptWrap"></div>';
+    }else{
+      html+='<textarea id="d-'+f.k+'" style="min-height:'+(f.k==='q'?'64px':'46px')+'"></textarea>';
+    }
+    html+='</div></div>';
+  }
+  html+='<button class="fbtn" id="dCommit">'+esc(commitLabel)+'</button>';
+  html+='<button class="fbtn2" id="dCancel">比較をやめる</button>';
+  html+='</div>';
+  host.innerHTML=html;
+
+  const setOpts=(o,a)=>{document.getElementById('dOptWrap').innerHTML=optRows(o,a,'dAns','d-o')};
+  const useNewOpts = hasOptsNew && !sameOpts(cur,neu);
+  setOpts(useNewOpts?neu.o.map(x=>String(x)):(cur.o||['','','','']), useNewOpts?neu.a:(cur.a|0));
+  for(const f of fields){
+    if(f.k==='opts')continue;
+    const cv=(cur[f.k]||'').trim(), nv=(neu[f.k]||'').trim();
+    document.getElementById('d-'+f.k).value=(nv&&nv!==cv)?nv:cv;
+  }
+  host.querySelectorAll('.dbtn').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k,a=b.dataset.a;
+    host.querySelectorAll('.dbtn[data-k="'+k+'"]').forEach(x=>x.classList.toggle('on',x===b));
+    if(k==='opts'){
+      if(a==='keep')setOpts(cur.o||['','','',''],cur.a|0);
+      else setOpts(neu.o.map(x=>String(x)),neu.a);
+      return;
+    }
+    const ta=document.getElementById('d-'+k);
+    const cv=(cur[k]||'').trim(), nv=(neu[k]||'').trim();
+    if(a==='keep')ta.value=cv;
+    else if(a==='replace')ta.value=nv;
+    else ta.value=cv?(cv+' ／ '+nv):nv;
+  });
+  document.getElementById('dCancel').onclick=()=>{host.innerHTML='';if(onCancel)onCancel()};
+  document.getElementById('dCommit').onclick=()=>{
+    const o=[0,1,2,3].map(i=>document.getElementById('d-o'+i).value.trim());
+    const sel=host.querySelector('input[name=dAns]:checked');
+    onCommit({
+      q:document.getElementById('d-q').value.trim(),
+      o:o, a:sel?+sel.value:0,
+      c:document.getElementById('d-c').value.trim(),
+      ex:document.getElementById('d-ex').value.trim()
+    });
+  };
+  host.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ---- add ---- */
+function optRows(vals,ans,name,idPrefix){
+  const nm=name||'ansSel', px=idPrefix||'f-o';
+  return [0,1,2,3].map(i=>`<div class="optrow">
+    <input type="radio" name="${nm}" value="${i}" ${ans===i?'checked':''}>
+    <input type="text" id="${px}${i}" placeholder="選択肢${i+1}" value="${esc(vals&&vals[i]||'')}">
+  </div>`).join('');
+}
+function renderAdd(){
+  setNav('add');
+  main.innerHTML=`
+  <div class="fpanel">
+    <div class="hd"><b>手順①</b> 問題文を入力するか、語句・人名・事件名だけを入力してください。語句だけの場合はClaudeが問題文ごと作成します。</div>
+    <div class="frow"><textarea id="f-in" placeholder="例1：ナントの勅令&#10;例2：1685年にルイ14世がナントの勅令を廃止した結果、国外へ流出した人々を何と呼ぶか。"></textarea></div>
+    <button class="fbtn" id="askBtn">Claudeへ送る文を作る</button>
+    <button class="fbtn2" id="manualBtn">Claudeを使わず手入力する</button>
+  </div>
+
+  <div class="fpanel" id="askPanel" style="display:none">
+    <div class="hd"><b>手順②</b> 下の文をコピーして、Claudeとの会話に貼り付けて送信してください。</div>
+    <div class="frow"><textarea id="askText" readonly style="min-height:120px;font-size:12px"></textarea></div>
+    <button class="fbtn2" id="askCopy">この文をコピー</button>
+    <div class="hd"><b>手順③</b> Claudeの返答（JSON）をここに貼り付けてください。</div>
+    <div class="frow"><textarea id="ansPaste" placeholder='{"q":"...","o":["...","...","...","..."],"a":0,"c":"...","ex":"...","warn":""}'></textarea></div>
+    <button class="fbtn" id="ansApply">返答を反映する</button>
+  </div>
+
+  <div id="warnArea"></div>
+  <div id="diffArea"></div>
+
+  <div class="fpanel" id="cardPanel" style="display:none">
+    <div class="hd"><b>手順④</b> 内容を確認・修正して保存してください。正解にする選択肢の左のボタンを選んでください。</div>
+    <div class="frow"><label>問題文（必須）</label><textarea id="f-q" style="min-height:70px"></textarea></div>
+    <div class="frow"><label>選択肢（必須・正解を選択）</label><div id="optWrap">${optRows(null,0)}</div></div>
+    <div class="frow"><label>章・分野</label><input type="text" id="f-c" placeholder="例：【近代ヨーロッパ】絶対王政"></div>
+    <div class="frow"><label>解説（50文字以内が目安）</label><textarea id="f-ex" style="min-height:56px"></textarea></div>
+    <button class="fbtn" id="saveBtn">この問題を追加する</button>
+  </div>
+
+  <div class="substat"><span>追加済み <b>${UC.length}</b> 問</span><span>収録合計 <b>${QS.length}</b> 問</span></div>`;
+
+  $('#askBtn').onclick=()=>{
+    const v=$('#f-in').value.trim();
+    if(!v){toast('問題文または語句を入力してください');return}
+    $('#askText').value=buildPrompt(v);
+    $('#askPanel').style.display='flex';
+    $('#askPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  $('#askCopy').onclick=async()=>{
+    const t=$('#askText').value;
+    try{await navigator.clipboard.writeText(t);toast('コピーしました。Claudeに貼り付けて送信してください')}
+    catch(e){const ta=$('#askText');ta.focus();ta.select();
+      try{document.execCommand('copy');toast('コピーしました')}catch(x){toast('文を長押しして「すべて選択」→コピーしてください')}}
+  };
+  $('#manualBtn').onclick=()=>{
+    const v=$('#f-in').value.trim();
+    if(v&&!$('#f-q').value.trim())$('#f-q').value=v;
+    $('#cardPanel').style.display='flex';
+    $('#cardPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  $('#ansApply').onclick=()=>{
+    const j=extractJSON($('#ansPaste').value||'');
+    if(!j){toast('JSONを読み取れません。{ } を含む返答全体を貼り付けてください');return}
+    const wa=$('#warnArea');
+    wa.innerHTML=(j.warn&&String(j.warn).trim())?`<div class="warnbox">⚠️ ${esc(String(j.warn).trim())}</div>`:'';
+    if(!j.q||!Array.isArray(j.o)||j.o.filter(x=>x&&String(x).trim()).length<4){
+      toast('問題を作成できませんでした（上の警告をご確認ください）');
+      $('#diffArea').innerHTML='';
+      return;
+    }
+    const neu={q:String(j.q),o:j.o.map(x=>String(x)),
+               a:Math.max(0,Math.min(3,parseInt(j.a)||0)),c:j.c||'',ex:j.ex||''};
+    // 現在の内容（フォームの入力内容。未入力なら手順①で入力した問題文）
+    const shown=$('#cardPanel').style.display!=='none';
+    const cur=shown?readForm():{q:questionLikeInput(),o:['','','',''],a:0,c:'',ex:''};
+    const hasCur=cur.q||cur.o.some(x=>x)||cur.c||cur.ex;
+    if(!hasCur){
+      fillForm(neu);
+      $('#cardPanel').style.display='flex';
+      $('#cardPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+      toast('反映しました。内容を確認して保存してください');
+      return;
+    }
+    renderDiffPanel($('#diffArea'),cur,neu,'この内容をフォームに反映する',r=>{
+      fillForm(r);
+      $('#diffArea').innerHTML='';
+      $('#cardPanel').style.display='flex';
+      $('#cardPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+      toast('反映しました。内容を確認して保存してください');
+    });
+  };
+  $('#saveBtn').onclick=saveNew;
+}
+/* 手順①の入力が「問題文」として成立していそうなら、それを現在の内容として扱う */
+function questionLikeInput(){
+  const el=$('#f-in'); if(!el)return '';
+  const v=el.value.trim();
+  return (v.length>=15&&/[。？?]$/.test(v))?v:'';
+}
+function fillForm(v){
+  $('#f-q').value=v.q||'';
+  $('#optWrap').innerHTML=optRows(v.o||['','','',''],v.a|0);
+  $('#f-c').value=v.c||'';
+  $('#f-ex').value=v.ex||'';
+}
+function readForm(){
+  const q=$('#f-q').value.trim();
+  const o=[0,1,2,3].map(i=>$('#f-o'+i).value.trim());
+  const sel=document.querySelector('input[name=ansSel]:checked');
+  const a=sel?+sel.value:0;
+  return {q,o,a,c:$('#f-c').value.trim(),ex:$('#f-ex').value.trim()};
+}
+async function saveNew(){
+  const v=readForm();
+  if(!v.q||v.o.some(x=>!x)){toast('問題文と4つの選択肢はすべて必須です');return}
+  if(new Set(v.o).size<4){toast('選択肢が重複しています');return}
+  if(QS.some(x=>x.q===v.q)){toast('同じ問題文がすでに登録されています');return}
+  const card={id:'u'+Date.now(),t:'mc',q:v.q,o:v.o,a:v.a,c:v.c,ex:v.ex,w:v.o[v.a]};
+  UC.push(card);QS.push(card);
+  dirty=true;const ok=await saveState();
+  updTotal();
+  toast(ok?'問題を追加しました':'追加しましたが保存はまだ完了していません');
+  renderAdd();
+}
+
+/* ---- edit ---- */
+function buildUpdatePrompt(q){
+  return `あなたは世界史のエキスパートであり、大学受験世界史の問題作成者です。以下の4択問題を精査し、改善してください。
+
+■ 現在の内容
+問題文: ${q.q}
+選択肢1: ${q.o[0]}
+選択肢2: ${q.o[1]}
+選択肢3: ${q.o[2]}
+選択肢4: ${q.o[3]}
+現在の正解: ${q.a+1}
+章・分野: ${q.c||'（未設定）'}
+解説: ${q.ex||'（未設定）'}
+
+■ お願いしたいこと
+1. 正解の検証。事実誤認があれば正しい内容に直す。
+2. 誤答選択肢の見直し。ランダムな語ではなく「受験生が実際によく間違える答え」にする。同時代・同地域の類似事項、名称が紛らわしい事項、前後の出来事、主体を取り違えやすい事項を優先し、必ず実在する世界史用語を使う。
+3. 章・分野ラベルの検証（【時代・地域】分野名 の形式）。
+4. 解説を50文字以内で作成。重要ポイント・関連事項・混同しやすい事項との違いなど、記憶の助けになる一言。
+5. 現在の内容に誤りがあれば、その内容を review に日本語で簡潔に書く。問題なければ空文字。
+
+■ 出力形式（JSONオブジェクトのみ。前置き・説明・コードブロック記号は不要）
+{"q":"...","o":["...","...","...","..."],"a":0,"c":"...","ex":"...","review":""}`;
+}
+function renderEdit(id,from){
+  const q=QS.find(x=>String(x.id)===String(id));
+  if(!q){renderList();return}
+  setNav(from==='review'?'home':'list');
+  main.innerHTML=`
+  <div class="fpanel">
+    <div class="frow"><label>問題文</label><textarea id="f-q" style="min-height:70px"></textarea></div>
+    <div class="frow"><label>選択肢（正解を選択）</label><div id="optWrap">${optRows(q.o,q.a)}</div></div>
+    <div class="frow"><label>章・分野</label><input type="text" id="f-c"></div>
+    <div class="frow"><label>解説（50文字以内が目安）</label><textarea id="f-ex" style="min-height:56px"></textarea></div>
+    <div style="display:flex;gap:10px">
+      <button class="fbtn2" id="eCancel">キャンセル</button>
+      <button class="fbtn" id="eSave">修正を保存</button>
+    </div>
+  </div>
+
+  <div class="fpanel">
+    <div class="hd"><b>Claudeで内容を見直す</b><br>下の文をコピーしてClaudeに送り、返ってきたJSONを貼り付けると、この問題の選択肢と解説を作り直せます。</div>
+    <button class="fbtn2" id="upAsk">Claudeへ送る文を作る</button>
+    <div id="upArea" style="display:none;flex-direction:column;gap:11px">
+      <div class="frow"><textarea id="upText" readonly style="min-height:110px;font-size:12px"></textarea></div>
+      <button class="fbtn2" id="upCopy">この文をコピー</button>
+      <div class="frow"><label>Claudeの返答（JSON）</label><textarea id="upPaste" placeholder='{"q":"...","o":[...],"a":0,"c":"...","ex":"...","review":""}'></textarea></div>
+      <button class="fbtn" id="upApply">返答を反映する</button>
+    </div>
+  </div>
+
+  <div id="warnArea"></div>
+  <div id="diffArea"></div>
+  <button class="danger" id="eDel">この問題を削除</button>
+  <div class="substat" style="margin-top:12px"><span>修正・削除の内容は学習記録と一緒に保存されます。</span></div>`;
+
+  $('#f-q').value=q.q;$('#f-c').value=q.c||'';$('#f-ex').value=q.ex||'';
+  const back=()=>{ if(from==='review')renderCard(); else renderList(); };
+  $('#eCancel').onclick=back;
+  $('#eSave').onclick=async()=>{
+    const v=readForm();
+    if(!v.q||v.o.some(x=>!x)){toast('問題文と4つの選択肢はすべて必須です');return}
+    if(new Set(v.o).size<4){toast('選択肢が重複しています');return}
+    await applyEdit(q,v);
+    toast('修正を保存しました');back();
+  };
+  $('#upAsk').onclick=()=>{
+    $('#upText').value=buildUpdatePrompt(Object.assign({},q,readForm()));
+    $('#upArea').style.display='flex';
+    $('#upArea').scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  $('#upCopy').onclick=async()=>{
+    const t=$('#upText').value;
+    try{await navigator.clipboard.writeText(t);toast('コピーしました')}
+    catch(e){const ta=$('#upText');ta.focus();ta.select();
+      try{document.execCommand('copy');toast('コピーしました')}catch(x){toast('長押しして「すべて選択」→コピーしてください')}}
+  };
+  $('#upApply').onclick=()=>{
+    const j=extractJSON($('#upPaste').value||'');
+    if(!j){toast('JSONを読み取れません');return}
+    const wa=$('#warnArea');
+    wa.innerHTML=(j.review&&String(j.review).trim())?`<div class="warnbox">⚠️ Claudeの指摘：${esc(String(j.review).trim())}</div>`:'';
+    const hasOpts=Array.isArray(j.o)&&j.o.length>=4&&j.o.slice(0,4).every(x=>x&&String(x).trim());
+    const neu={q:j.q?String(j.q):'',
+               o:hasOpts?j.o.slice(0,4).map(x=>String(x)):null,
+               a:Math.max(0,Math.min(3,parseInt(j.a)||0)),
+               c:j.c||'',ex:j.ex||''};
+    renderDiffPanel($('#diffArea'),readForm(),neu,'この内容をフォームに反映する',r=>{
+      fillForm(r);
+      $('#diffArea').innerHTML='';
+      toast('反映しました。確認して「修正を保存」を押してください');
+      $('#f-q').scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+  };
+  $('#eDel').onclick=async()=>{
+    if(!confirm('この問題を削除しますか？学習記録も消えます。'))return;
+    deleteQ(q.id);
+    toast('削除しました');
+    if(from==='review'){
+      for(let i=queue.length-1;i>=0;i--){if(String(queue[i].id)===String(q.id)){queue.splice(i,1);if(i<qi)qi--}}
+      sessionTotal=Math.max(sessionTotal-1,sessionDone);
+      renderCard();
+    }else renderList();
+  };
+}
+async function applyEdit(q,v){
+  Object.assign(q,{q:v.q,o:v.o,a:v.a,c:v.c,ex:v.ex,w:v.o[v.a]});
+  if(isUserQ(q.id)){const u=UC.find(x=>x.id===q.id);if(u)Object.assign(u,{q:v.q,o:v.o,a:v.a,c:v.c,ex:v.ex,w:v.o[v.a]})}
+  else OV[q.id]={q:q.q,o:q.o,a:q.a,c:q.c,ex:q.ex,w:q.w};
+  dirty=true;return await saveState();
+}
+function deleteQ(id){
+  if(isUserQ(id))UC=UC.filter(x=>x.id!==id);
+  else if(!DL.some(d=>String(d)===String(id)))DL.push(id);
+  const i=QS.findIndex(x=>String(x.id)===String(id));
+  if(i>=0)QS.splice(i,1);
+  delete S[id];
+  dirty=true;saveState();updTotal();
+}
+
+/* ---- stat ---- */
+function renderStat(){
+  setNav('stat');
+  const acc=LOG.total?Math.round(LOG.correct/LOG.total*100):0;
+  const done=QS.filter(q=>S[q.id]&&S[q.id].st===2).length;
+  const touched=QS.filter(q=>S[q.id]&&S[q.id].reps>0).length;
+  const pct=QS.length?Math.round(done/QS.length*100):0;
+  const weak=QS.map(q=>({q,st:S[q.id]})).filter(x=>x.st&&(x.st.ng|0)>0)
+    .sort((a,b)=>(b.st.ng-b.st.ok)-(a.st.ng-a.st.ok)).slice(0,15);
+  main.innerHTML=`
+  <div class="substat"><span>累計正答率 <b>${acc}%</b></span><span>解答数 <b>${LOG.total||0}</b></span><span>連続 <b>${LOG.streakDays||0}</b>日</span></div>
+  <div class="sect">習得状況</div>
+  <div class="row" style="display:block">
+    <div style="display:flex;justify-content:space-between"><span>全体</span><span style="color:var(--ink-soft);font-size:12px">習得 ${done}/${QS.length}・着手 ${touched}</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div></div>
+  <div class="sect">間違えた回数が多い問題</div>
+  ${weak.length?weak.map(x=>`<div class="row"><span style="font-size:13px">${esc(x.q.w||x.q.o[x.q.a])}</span><span style="color:var(--seal);font-size:12px;flex:none">✕${x.st.ng|0} / ✓${x.st.ok|0}</span></div>`).join('')
+   :'<div class="substat"><span>まだ記録がありません</span></div>'}`;
+}
+
+/* ============ CSV ============ */
+const CSV_COLS=['問題文','選択肢1','選択肢2','選択肢3','選択肢4','正解番号','章・分野','解説','状態','復習予定日','安定度','難易度','復習回数','間違えた回数','正答数','誤答数'];
+const ST_NAME={0:'未着手',1:'学習中',2:'復習',3:'再学習'};
+const ST_CODE={'未着手':0,'学習中':1,'復習':2,'再学習':3};
+function csvCell(v){const s=(v==null?'':String(v));return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function stampNow(){const d=new Date(),z=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())}
+function downloadBlob(blob,fn){
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportCSV(){
+  const rows=[CSV_COLS.join(',')];
+  for(const q of QS){
+    const st=S[q.id]||{};
+    rows.push([
+      q.q,q.o[0],q.o[1],q.o[2],q.o[3],q.a+1,q.c||'',q.ex||'',
+      ST_NAME[st.st||0]||'未着手',
+      st.due?new Date(st.due).toISOString():'',
+      st.S?st.S.toFixed(4):'',st.D?st.D.toFixed(4):'',
+      st.reps||0,st.lapses||0,st.ok||0,st.ng||0
+    ].map(csvCell).join(','));
+  }
+  const blob=new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const fn='world-history-mc_'+stampNow()+'.csv';
+  downloadBlob(blob,fn);
+  toast(QS.length+' 問を '+fn+' に書き出しました');
+}
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF)text=text.slice(1);
+  const rows=[];let row=[],cell='',inQ=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQ){
+      if(ch==='"'){ if(text[i+1]==='"'){cell+='"';i++} else inQ=false }
+      else cell+=ch;
+    }else{
+      if(ch==='"')inQ=true;
+      else if(ch===','){row.push(cell);cell=''}
+      else if(ch==='\r'){}
+      else if(ch==='\n'){row.push(cell);rows.push(row);row=[];cell=''}
+      else cell+=ch;
+    }
+  }
+  if(cell!==''||row.length){row.push(cell);rows.push(row)}
+  return rows.filter(r=>r.some(c=>c.trim()!==''));
+}
+function importCSV(){
+  const f=$('#csvFile').files&&$('#csvFile').files[0];
+  if(!f){toast('CSVファイルを選んでください');return}
+  const withProg=$('#csvProg').checked;
+  const rd=new FileReader();
+  rd.onerror=()=>toast('ファイルを読み込めませんでした');
+  rd.onload=()=>{
+    try{
+      const rows=parseCSV(String(rd.result||''));
+      if(rows.length<2){toast('データ行がありません');return}
+      const head=rows[0].map(h=>h.trim());
+      const ix=n=>head.indexOf(n);
+      const iQ=ix('問題文'),iO=[ix('選択肢1'),ix('選択肢2'),ix('選択肢3'),ix('選択肢4')],iA=ix('正解番号');
+      if(iQ<0||iO.some(x=>x<0)||iA<0){toast('形式が違います（問題文・選択肢1〜4・正解番号の列が必要です）');return}
+      const iC=ix('章・分野'),iE=ix('解説'),iSt=ix('状態'),iDue=ix('復習予定日'),
+            iS=ix('安定度'),iD=ix('難易度'),iR=ix('復習回数'),iL=ix('間違えた回数'),
+            iOk=ix('正答数'),iNg=ix('誤答数');
+      let added=0,updated=0,prog=0,skipped=0;
+      for(let r=1;r<rows.length;r++){
+        const row=rows[r];
+        const qt=(row[iQ]||'').trim();
+        const o=iO.map(i=>(row[i]||'').trim());
+        let a=parseInt(row[iA])-1;
+        if(!qt||o.some(x=>!x)||!(a>=0&&a<=3)){skipped++;continue}
+        const c=(iC>=0?row[iC]:'').trim(), ex=(iE>=0?row[iE]:'').trim();
+        let card=QS.find(x=>x.q===qt);
+        if(card){
+          Object.assign(card,{o,a,c,ex,w:o[a]});
+          if(isUserQ(card.id)){const u=UC.find(x=>x.id===card.id);if(u)Object.assign(u,{o,a,c,ex,w:o[a]})}
+          else OV[card.id]={q:card.q,o,a,c,ex,w:o[a]};
+          updated++;
+        }else{
+          card={id:'u'+Date.now()+'_'+r,t:'mc',q:qt,o,a,c,ex,w:o[a]};
+          UC.push(card);QS.push(card);added++;
+        }
+        if(withProg&&iSt>=0){
+          const code=ST_CODE[(row[iSt]||'').trim()];
+          if(code!==undefined&&code!==0){
+            const dueRaw=(iDue>=0?row[iDue]:'').trim();
+            const dueMs=dueRaw?Date.parse(dueRaw):NaN;
+            const sv=parseFloat(iS>=0?row[iS]:''), dv=parseFloat(iD>=0?row[iD]:'');
+            S[card.id]={st:code,step:0,
+              S:isFinite(sv)&&sv>0?sv:1,
+              D:isFinite(dv)&&dv>0?clamp(dv,1,10):5,
+              due:isFinite(dueMs)?dueMs:Date.now(),last:Date.now(),
+              reps:parseInt(iR>=0?row[iR]:'0')||0,
+              lapses:parseInt(iL>=0?row[iL]:'0')||0,
+              ok:parseInt(iOk>=0?row[iOk]:'0')||0,
+              ng:parseInt(iNg>=0?row[iNg]:'0')||0};
+            prog++;
+          }
+        }
+      }
+      dirty=true;saveState();updTotal();
+      let msg='追加 '+added+' 問、更新 '+updated+' 問';
+      if(withProg)msg+='、進捗 '+prog+' 件';
+      if(skipped)msg+='（不備 '+skipped+' 行は除外）';
+      toast(msg);renderSet();
+    }catch(e){toast('取り込みに失敗しました');}
+  };
+  rd.readAsText(f,'UTF-8');
+}
+
+/* ---- settings ---- */
+function renderSet(){
+  setNav('set');
+  main.innerHTML=`
+  <div class="sect">学習量</div>
+  <div class="row"><label>1日の新規問題数</label><input type="number" id="np" min="0" max="100" value="${CFG.newPerDay}"></div>
+  <div class="row"><label>1回の出題上限（0=無制限）</label><input type="number" id="sm" min="0" max="300" value="${CFG.sessionMax}"></div>
+  <div class="sect">出題設定</div>
+  <div class="row"><label>目標記憶率</label><select id="rt">
+    ${[0.8,0.85,0.9,0.95].map(v=>`<option value="${v}" ${CFG.retention==v?'selected':''}>${Math.round(v*100)}%</option>`).join('')}
+  </select></div>
+  <div class="row"><label>出題傾向</label><select id="bs">
+    <option value="review" ${CFG.bias==='review'?'selected':''}>復習優先</option>
+    <option value="new" ${CFG.bias==='new'?'selected':''}>未学習優先</option>
+    <option value="mix" ${CFG.bias==='mix'?'selected':''}>ランダム</option>
+  </select></div>
+  <div class="row"><label>新規の並び</label><select id="od">
+    <option value="seq" ${CFG.order==='seq'?'selected':''}>収録順</option>
+    <option value="rand" ${CFG.order==='rand'?'selected':''}>ランダム</option>
+  </select></div>
+
+  <div class="sect">書き出し・読み込み</div>
+  <div class="fpanel">
+    <div class="hd"><b>CSVで書き出す</b><br>全 ${QS.length} 問を学習進捗つきで保存します。バックアップや他の端末への移行に使えます。</div>
+    <button class="fbtn" id="csvOut">CSVファイルをダウンロード</button>
+  </div>
+  <div class="fpanel">
+    <div class="hd"><b>CSVを読み込む</b><br>同じ形式のCSVを取り込みます。問題文が一致するものは上書きし、無いものは追加します。</div>
+    <input type="file" id="csvFile" accept=".csv,text/csv">
+    <label style="font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px">
+      <input type="checkbox" id="csvProg" checked> 学習進捗も一緒に取り込む
+    </label>
+    <button class="fbtn2" id="csvIn">選んだCSVを取り込む</button>
+  </div>
+
+  <div class="sect">データ</div>
+  <div class="substat"><span>保存先 <b>${storageKind==='claude'?'アプリ内':storageKind==='local'?'この端末':'なし'}</b></span><span>収録 <b>${QS.length}</b> 問（追加分 ${UC.length}）</span></div>
+  <button class="ghost" id="exp">学習記録をコピー用に書き出す（JSON）</button>
+  <button class="danger" id="rst">学習記録をすべて消去する</button>
+
+  <div class="sect">この教材について</div>
+  <div class="ex" style="margin-top:0">
+  収録：世界史一問一答100問（4択形式）。誤答選択肢は同じ章の他の設問の解答から構成しています。<br><br>
+  「追加」タブでは、問題文でも語句だけでも入力できます。語句だけの場合はClaudeが問題文ごと作成し、誤答選択肢には受験生がよく間違える紛らわしい事項を、あわせて50文字以内の解説を付けます。Claudeの返答を反映するときは、現在の内容と項目ごとに見比べて「現在のまま／置き換え／追記」を選べます。<br><br>
+  復習間隔はFSRS-5アルゴリズムで自動計算されます。答えを見た後の自己評価（もう一度／難しい／普通／簡単）が次回の出題時期を決めます。
+  </div>`;
+  $('#np').onchange=e=>{CFG.newPerDay=clamp(+e.target.value|0,0,100);scheduleSave()};
+  $('#sm').onchange=e=>{CFG.sessionMax=clamp(+e.target.value|0,0,300);scheduleSave()};
+  $('#rt').onchange=e=>{CFG.retention=+e.target.value;scheduleSave()};
+  $('#bs').onchange=e=>{CFG.bias=e.target.value;scheduleSave()};
+  $('#od').onchange=e=>{CFG.order=e.target.value;scheduleSave()};
+  $('#csvOut').onclick=exportCSV;
+  $('#csvIn').onclick=importCSV;
+  $('#exp').onclick=()=>{
+    const t=JSON.stringify({s:S,cfg:CFG,log:LOG,uc:UC,ov:OV,dl:DL});
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('クリップボードにコピーしました')).catch(()=>toast('コピーできませんでした'));
+    else toast('この環境ではコピーできません');
+  };
+  $('#rst').onclick=()=>{
+    if(!confirm('すべての学習記録を消去します。追加した問題は残ります。よろしいですか？'))return;
+    S={};LOG={date:'',newDone:0,revDone:0,streakDays:0,lastStudy:'',correct:0,total:0};
+    dirty=true;saveState();toast('学習記録を消去しました');renderSet();
+  };
+}
+
+/* ---- boot ---- */
+$('#nav-home').onclick=renderHome;
+$('#nav-list').onclick=renderList;
+$('#nav-add').onclick=renderAdd;
+$('#nav-stat').onclick=renderStat;
+$('#nav-set').onclick=renderSet;
+(async()=>{updTotal();await loadState();updTotal();renderHome()})();
+window.addEventListener('beforeunload',()=>{if(dirty)saveState()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&dirty)saveState()});
+</script>
+</body>
+</html>
